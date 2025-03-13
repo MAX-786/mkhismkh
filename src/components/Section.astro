@@ -1,0 +1,22 @@
+---
+type Props = {
+  className: string;
+  title: string;
+};
+
+const { className, title } = Astro.props;
+---
+
+<section class:list={["flex flex-col gap-2", className]}>
+  {
+    title && (
+      <div class="flex items-center gap-2">
+        <div class="text-base font-bold text-black dark:text-white">
+          {title}
+        </div>
+        <div class="h-0.5 flex-grow bg-black/25 dark:bg-white/25" />
+      </div>
+    )
+  }
+  <slot />
+</section>

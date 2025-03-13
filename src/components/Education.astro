@@ -1,0 +1,85 @@
+---
+import Section from "./Section.astro";
+import { education } from "@cv";
+---
+
+<Section className={Astro.props.className} title="Education">
+  <ul class="space-y-4">
+    {
+      education.map(
+        ({ institution, startDate, endDate, area, url, summary }) => {
+          const startYear = new Date(startDate).getFullYear();
+          const endYear = endDate ? new Date(endDate).getFullYear() : "Present";
+          const years = `${startYear} - ${endYear}`;
+
+          return (
+            <li class="flex flex-col md:flex-row md:items-baseline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2 hidden h-5 w-5 md:inline-block"
+              >
+                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                <path d="M22 10v6" />
+                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+              </svg>
+              <div class="relative w-full">
+                <time class="mb-1 text-xs font-bold text-black/50 dark:text-white/50 md:absolute md:right-0 md:top-0">
+                  {years}
+                </time>
+                <div class="text-base font-medium leading-snug text-black dark:text-white">
+                  {url ? (
+                    <a
+                      class="inline-flex items-center duration-300 hover:text-black/80 hover:transition-colors dark:hover:text-white/80"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {institution}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        class="ml-1 h-4 w-4"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  ) : (
+                    <span>{institution}</span>
+                  )}
+                </div>
+                <p class="mt-1 text-sm text-black/80 dark:text-white/80">
+                  {area}
+                </p>
+                {summary && (
+                  <div class="mt-4 text-sm">
+                    <ul class="space-y-1 text-black/50 dark:text-white/50">
+                      {Array.isArray(summary) ? (
+                        summary.map((item) => <li>{item}</li>)
+                      ) : (
+                        <li>{summary}</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        },
+      )
+    }
+  </ul>
+</Section>

@@ -1,0 +1,24 @@
+---
+import { Icon } from "astro-icon/components";
+
+type Props = {
+  icon: string;
+  href: string;
+  label: string;
+};
+
+const { icon, href, label } = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  class="group flex w-fit items-center rounded border border-neutral-300 px-3 py-2 hover:bg-neutral-200 dark:border-neutral-700 dark:hover:bg-neutral-800"
+  aria-label={label}
+>
+  <span
+    class="text-neutral-600 duration-300 hover:transition-colors group-hover:text-black dark:text-neutral-400 dark:group-hover:text-white"
+  >
+    <Icon name={icon} size={20} />
+  </span>
+</a>

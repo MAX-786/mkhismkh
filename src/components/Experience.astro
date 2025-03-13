@@ -1,0 +1,114 @@
+---
+import ExpandButton from "./ExpandButton";
+import Section from "./Section.astro";
+import { work } from "@cv";
+---
+
+<Section className={Astro.props.className} title="Experience">
+  <div class="grid grid-cols-1 gap-x-4 sm:grid-cols-[auto_auto_1fr] sm:gap-x-8">
+    {
+      work.map(
+        (
+          {
+            name,
+            startDate,
+            endDate,
+            position,
+            summary,
+            responsibilities,
+            url,
+            location,
+            location_type,
+          },
+          index,
+        ) => {
+          const startYear = new Date(startDate).getFullYear();
+          const endYear = endDate ? new Date(endDate).getFullYear() : "Present";
+          const isLastItem = index === work.length - 1;
+
+          return (
+            <>
+              {/* Datetime */}
+              <div class="mt-1 text-xs font-bold text-black/50 dark:text-white/50">
+                <time datetime={startDate}>{startYear}</time>
+                <span class="mx-1">-</span>
+                <time datetime={endDate}>{endYear}</time>
+              </div>
+
+              {/* Timeline */}
+              <div class="relative hidden justify-center sm:flex">
+                {!isLastItem && (
+                  <div class="absolute top-2 h-full w-px bg-black/25 dark:bg-white/25" />
+                )}
+                <div class="relative z-10 mt-2 h-3 w-3 rounded-full bg-black dark:bg-white" />
+              </div>
+
+              {/* Content */}
+              <div class={isLastItem ? "" : "mb-8"}>
+                <div class="font-bold text-black dark:text-white">
+                  {position} <span>@</span>
+                  {url ? (
+                    <a
+                      class="inline-flex items-center duration-300 hover:text-black/80 hover:transition-colors dark:hover:text-white/80"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {name}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        class="ml-1 h-4 w-4 shrink-0 translate-y-px"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  ) : (
+                    name
+                  )}
+                </div>
+                {(location || location_type) && (
+                  <p class="mt-2 text-sm text-black/80 dark:text-white/80">
+                    {location} {location && location_type && " - "}{" "}
+                    {location_type}
+                  </p>
+                )}
+                <div class="mt-2 space-y-4 text-sm">
+                  {summary && (
+                    <ul class="text-black/50 dark:text-white/50">
+                      {Array.isArray(summary) ? (
+                        summary.map((item) => <li>{item}</li>)
+                      ) : (
+                        <li>{summary}</li>
+                      )}
+                    </ul>
+                  )}
+                  {responsibilities && (
+                    <ExpandButton client:load>
+                      <div class="mt-2 text-sm">
+                        <div class="font-medium text-black/80 dark:text-white/80">
+                          Responsibilities:
+                        </div>
+                        <ul class="list-inside list-disc space-y-1 text-black/50 dark:text-white/50">
+                          {responsibilities.map((responsibility) => (
+                            <li>{responsibility}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </ExpandButton>
+                  )}
+                </div>
+              </div>
+            </>
+          );
+        },
+      )
+    }
+  </div>
+</Section>
