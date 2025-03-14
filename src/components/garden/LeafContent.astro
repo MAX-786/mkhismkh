@@ -1,0 +1,32 @@
+---
+type Props = {
+  content: string;
+  references?: {
+    title: string;
+    url: string;
+  }[];
+};
+
+const { content, references } = Astro.props;
+---
+
+<div class="content">
+  {content.split("\n").map((paragraph) => <p>{paragraph}</p>)}
+</div>
+
+{
+  references && references.length > 0 && (
+    <div class="mt-12 border-t border-black/10 pt-6 dark:border-white/10">
+      <h3>References</h3>
+      <ul>
+        {references.map((ref) => (
+          <li>
+            <a href={ref.url} target="_blank" rel="noopener noreferrer">
+              {ref.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

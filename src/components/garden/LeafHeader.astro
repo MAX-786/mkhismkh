@@ -1,0 +1,47 @@
+---
+type Props = {
+  leaf: {
+    title: string;
+    date: string;
+    growthStage: string;
+    tags: string[];
+  };
+  metadata?: {
+    growthStages?: {
+      name: string;
+      description: string;
+    }[];
+  };
+};
+
+const { leaf, metadata } = Astro.props;
+---
+
+<header class="not-prose mb-8">
+  <h1 class="text-3xl font-bold mb-4">{leaf.title}</h1>
+  <div class="mt-4 flex flex-wrap items-center gap-4">
+    <div class="flex items-center">
+      <span class="text-sm text-black/60 dark:text-white/60">{leaf.date}</span>
+    </div>
+    <div class="flex items-center">
+      <div class="relative group">
+        <span class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10">
+          {leaf.growthStage}
+        </span>
+        <div class="absolute bottom-full right-0 mb-2 w-48 rounded-md bg-black/90 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-white/90 dark:text-black">
+          {metadata?.growthStages?.find(stage => stage.name === leaf.growthStage)?.description || 
+           "A stage in the growth process"}
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      {
+        leaf.tags.map((tag) => (
+          <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs dark:bg-white/5">
+            {tag}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</header>

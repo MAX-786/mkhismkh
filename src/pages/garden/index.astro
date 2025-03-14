@@ -1,43 +1,24 @@
 ---
 import Heading from "@/components/Heading.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import GardenHeader from "@/components/garden/GardenHeader.astro";
+import TreeCard from "@/components/garden/TreeCard.astro";
 import { SITE } from "@/consts";
 import { trees } from "@garden";
-
 ---
 
 <BaseLayout
   title="Garden"
   description="My digital garden of ideas and solutions"
 >
-  <div class="container mx-auto my-24 xl:my-5">
-    <Heading title="Digital Garden" />
-    <p class="mb-8 text-black/80 dark:text-white/80">
-      This is where I cultivate and grow my ideas, solutions, and learnings.
-      Browse through different trees to explore various topics.
-    </p>
+  <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
+    <GardenHeader 
+      title="Digital Garden" 
+      description="This is where I cultivate and grow my ideas, solutions, and learnings. Browse through different trees to explore various topics."
+    />
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {
-        trees.map((tree) => (
-          <a href={`/garden/${tree.slug}`} class="group">
-            <div class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10">
-              <h3 class="mb-2 text-xl font-bold">{tree.name}</h3>
-              <p class="mb-4 text-black/80 dark:text-white/80">
-                {tree.description}
-              </p>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-black/60 dark:text-white/60">
-                  {tree.leaves.length} leaves
-                </span>
-                <span class="text-sm font-medium text-black/80 transition-transform duration-300 group-hover:translate-x-1 dark:text-white/80">
-                  Explore →
-                </span>
-              </div>
-            </div>
-          </a>
-        ))
-      }
+      {trees.map((tree) => <TreeCard tree={tree} />)}
     </div>
   </div>
 </BaseLayout>
