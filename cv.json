@@ -5,18 +5,14 @@
     "label": "Software Developer with expertise in web technologies.",
     "summary": "Passionate about building innovative solutions and contributing to open source projects. Experienced in full-stack development with a focus on modern web technologies.",
     "location": {
-      "city": "Your City",
-      "countryCode": "Your Country Code",
-      "region": "Your Region"
+      "city": "",
+      "countryCode": "+91",
+      "region": ""
     },
     "socials": [
       {
         "network": "email",
-        "url": "mailto:your-email@example.com"
-      },
-      {
-        "network": "telegram",
-        "url": "https://t.me/yourusername"
+        "url": "mailto:hussainmohammad328@gmail.com"
       },
       {
         "network": "github",
@@ -24,7 +20,7 @@
       },
       {
         "network": "linkedin",
-        "url": "https://linkedin.com/in/yourusername"
+        "url": "https://linkedin.com/in/mohammad-k-hussain"
       }
     ]
   },

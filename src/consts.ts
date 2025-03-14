@@ -4,7 +4,7 @@ export const SITE: Site = {
   TITLE: "MKH",
   DESCRIPTION: "MAX-786's personal website",
   AUTHOR: "MAX-786",
-  REPO_URL: "https://github.com/MAX-786/MAX-786.github.io",
+  REPO_URL: "https://github.com/MAX-786/mkhismkh",
 };
 
 export const LINKS: Links = [
