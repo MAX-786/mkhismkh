@@ -1,0 +1,77 @@
+---
+import Heading from "@/components/Heading.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { SITE } from "@/consts";
+import { trees } from "@garden";
+
+export function getStaticPaths() {
+  return trees.map((tree) => ({
+    params: { tree: tree.slug },
+    props: { tree },
+  }));
+}
+
+const { tree } = Astro.props;
+
+---
+
+<BaseLayout title={tree.name} description={tree.description}>
+  <div class="container mx-auto my-24 xl:my-5">
+    <div class="mb-8">
+      <a
+        href="/garden/"
+        class="inline-flex items-center text-sm text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Garden
+      </a>
+    </div>
+
+    <Heading title={tree.name} />
+    <p class="mb-8 text-black/80 dark:text-white/80">{tree.description}</p>
+
+    <div class="space-y-6">
+      {
+        tree.leaves.map((leaf) => (
+          <a href={`/garden/${tree.slug}/${leaf.slug}`} class="block">
+            <div class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-md dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10">
+              <div class="mb-2 flex items-center justify-between">
+                <h3 class="text-lg font-bold">{leaf.title}</h3>
+                <span class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10">
+                  {leaf.growthStage}
+                </span>
+              </div>
+              <p class="mb-4 line-clamp-2 text-black/80 dark:text-white/80">
+                {leaf.content.substring(0, 150)}...
+              </p>
+              <div class="flex items-center justify-between">
+                <div class="flex flex-wrap gap-2">
+                  {leaf.tags.map((tag) => (
+                    <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs dark:bg-white/5">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <span class="text-sm text-black/60 dark:text-white/60">
+                  {leaf.date}
+                </span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,94 @@
+{
+  "trees": [
+    {
+      "name": "Web Development",
+      "slug": "web-dev",
+      "description": "Insights, solutions, and learnings from my web development journey",
+      "icon": "code",
+      "leaves": [
+        {
+          "title": "Solving React State Management",
+          "slug": "react-state-management",
+          "date": "2024-06-15",
+          "tags": ["react", "state", "frontend"],
+          "growthStage": "evergreen",
+          "content": "I've been working with various state management solutions in React, and I've found that for most applications, a combination of Context API and useReducer provides the best balance of simplicity and power...",
+          "references": [
+            {
+              "title": "React Docs",
+              "url": "https://react.dev/learn/scaling-up-with-reducer-and-context"
+            }
+          ]
+        },
+        {
+          "title": "CSS Grid vs Flexbox",
+          "slug": "css-grid-vs-flexbox",
+          "date": "2024-05-20",
+          "tags": ["css", "layout", "frontend"],
+          "growthStage": "budding",
+          "content": "When deciding between CSS Grid and Flexbox, I've developed a simple mental model: use Flexbox for one-dimensional layouts (rows OR columns) and Grid for two-dimensional layouts (rows AND columns)...",
+          "references": []
+        }
+      ]
+    },
+    {
+      "name": "Algorithms & Data Structures",
+      "slug": "algorithms",
+      "description": "Notes on problem-solving approaches and algorithm implementations",
+      "icon": "binary",
+      "leaves": [
+        {
+          "title": "Dynamic Programming Patterns",
+          "slug": "dp-patterns",
+          "date": "2024-06-01",
+          "tags": ["algorithms", "dynamic-programming", "leetcode"],
+          "growthStage": "growing",
+          "content": "After solving hundreds of LeetCode problems, I've identified several recurring patterns in dynamic programming problems that help me approach new challenges more systematically...",
+          "references": [
+            {
+              "title": "LeetCode DP Patterns",
+              "url": "https://leetcode.com/discuss/general-discussion/458695/dynamic-programming-patterns"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Project Management",
+      "slug": "project-management",
+      "description": "Lessons learned from managing software projects",
+      "icon": "calendar",
+      "leaves": [
+        {
+          "title": "Agile for Solo Developers",
+          "slug": "agile-solo",
+          "date": "2024-04-10",
+          "tags": ["agile", "productivity", "planning"],
+          "growthStage": "seedling",
+          "content": "While Agile methodologies are designed for teams, I've adapted several principles for my solo projects that have significantly improved my productivity and delivery consistency...",
+          "references": []
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "growthStages": [
+      {
+        "name": "seedling",
+        "description": "Initial thoughts or ideas that are still forming"
+      },
+      {
+        "name": "budding",
+        "description": "Ideas that are taking shape but need more development"
+      },
+      {
+        "name": "growing",
+        "description": "Well-developed thoughts that continue to evolve"
+      },
+      {
+        "name": "evergreen",
+        "description": "Mature, well-tested ideas that remain relevant over time"
+      }
+    ]
+  }
+}
