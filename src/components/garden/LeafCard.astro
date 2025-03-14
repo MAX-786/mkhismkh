@@ -21,16 +21,25 @@ const { leaf, treeSlug, metadata } = Astro.props;
 ---
 
 <a href={`/garden/${treeSlug}/${leaf.slug}`} class="block">
-  <div class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-md dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10">
+  <div
+    class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-md dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
+  >
     <div class="mb-2 flex items-center justify-between">
       <h3 class="text-lg font-bold">{leaf.title}</h3>
       <div class="relative group">
-        <span class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10">
+        <span
+          class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10"
+        >
           {leaf.growthStage}
         </span>
-        <div class="absolute bottom-full right-0 mb-2 w-48 rounded-md bg-black/90 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-white/90 dark:text-black">
-          {metadata?.growthStages?.find(stage => stage.name === leaf.growthStage)?.description || 
-           "A stage in the growth process"}
+        <div
+          class="absolute bottom-full right-0 mb-2 w-48 rounded-md bg-black/90 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-white/90 dark:text-black"
+        >
+          {
+            metadata?.growthStages?.find(
+              (stage) => stage.name === leaf.growthStage,
+            )?.description || "A stage in the growth process"
+          }
         </div>
       </div>
     </div>
@@ -39,11 +48,13 @@ const { leaf, treeSlug, metadata } = Astro.props;
     </p>
     <div class="flex items-center justify-between">
       <div class="flex flex-wrap gap-2">
-        {leaf.tags.map((tag) => (
-          <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs dark:bg-white/5">
-            {tag}
-          </span>
-        ))}
+        {
+          leaf.tags.map((tag) => (
+            <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs dark:bg-white/5">
+              {tag}
+            </span>
+          ))
+        }
       </div>
       <span class="text-sm text-black/60 dark:text-white/60">
         {leaf.date}

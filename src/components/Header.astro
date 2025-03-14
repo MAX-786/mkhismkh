@@ -29,7 +29,8 @@ const subpath = pathname.match(/[^/]+/g);
               href={LINK.HREF}
               class={cn(
                 "flex h-8 items-center justify-center rounded-full px-3 duration-300 hover:transition-colors",
-                pathname === LINK.HREF.replace(/\/$/, "") || (("/" + subpath?.[0]) === LINK.HREF.replace(/\/$/, ""))
+                pathname === LINK.HREF.replace(/\/$/, "") ||
+                  "/" + subpath?.[0] === LINK.HREF.replace(/\/$/, "")
                   ? "bg-black text-white dark:bg-white dark:text-black"
                   : "text-black/80 hover:bg-black/20 hover:text-black dark:text-white/80 dark:hover:bg-white/20 dark:hover:text-white",
               )}

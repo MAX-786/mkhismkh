@@ -7,6 +7,7 @@ import Starry from "@/components/Starry";
 import GridBackground from "@/components/GridBackground";
 const { title, description } = Astro.props;
 import { SITE } from "@/consts";
+import Navbar from "@/components/Navbar.astro";
 ---
 
 <!doctype html>
@@ -25,6 +26,7 @@ import { SITE } from "@/consts";
       className="fixed h-full w-full"
     />
     <Header />
+    <Navbar />
     <main class="z-10" transition:animate="slide">
       <slot />
     </main>

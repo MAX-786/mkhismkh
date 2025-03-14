@@ -15,7 +15,6 @@ export function getStaticPaths() {
 }
 
 const { tree } = Astro.props;
-
 ---
 
 <BaseLayout title={tree.name} description={tree.description}>
@@ -24,9 +23,11 @@ const { tree } = Astro.props;
     <GardenHeader title={tree.name} description={tree.description} />
 
     <div class="space-y-6">
-      {tree.leaves.map((leaf) => (
-        <LeafCard leaf={leaf} treeSlug={tree.slug} metadata={metadata} />
-      ))}
+      {
+        tree.leaves.map((leaf) => (
+          <LeafCard leaf={leaf} treeSlug={tree.slug} metadata={metadata} />
+        ))
+      }
     </div>
   </div>
 </BaseLayout>
