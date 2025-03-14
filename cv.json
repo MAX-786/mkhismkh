@@ -2,7 +2,7 @@
   "basics": {
     "name": "Mohammad K. Hussain",
     "nickname": "MAX-786",
-    "label": "Software Developer with expertise in web technologies.",
+    "label": "Software Developer with expertise in web technologies",
     "summary": "Passionate about building innovative solutions and contributing to open source projects. Experienced in full-stack development with a focus on modern web technologies.",
     "location": {
       "city": "",
@@ -26,156 +26,120 @@
   },
   "work": [
     {
-      "name": "PT. Verihubs Inteligensia Nusantara",
-      "position": "Back-End Engineer Intern",
-      "location_type": "Hybrid",
-      "location": "Jakarta, Indonesia",
-      "url": "https://verihubs.com",
-      "startDate": "2025-02-03",
-      "endDate": null,
-      "summary": null,
-      "responsibilities": null
-    },
-    {
-      "name": "GDGoC BINUS Bandung",
-      "position": "Back-End Core Team",
-      "location_type": "Hybrid",
-      "location": "Bandung, Indonesia",
-      "url": "https://gdg.community.dev/gdg-on-campus-binus-university-bandung-bandung-indonesia",
-      "startDate": "2024-10-01",
-      "endDate": null,
-      "summary": null,
-      "responsibilities": null
-    },
-    {
-      "name": "PT. Gunung Amal Solution International",
-      "position": "Freelance Back-End Developer",
+      "name": "Sutra AI (StringVentures)",
+      "position": "SDE Intern",
       "location_type": "Remote",
-      "location": "Bandung, Indonesia",
-      "url": "https://amalsolution.com",
-      "startDate": "2024-07-01",
-      "endDate": "2024-12-01",
-      "summary": "Worked on a freelance basis for back-end development, including system and API development for an Audit Trail Management System project. Collaborated with Business Analysts to meet project-specific requirements.",
+      "location": "India",
+      "url": "",
+      "startDate": "2025-01-01",
+      "endDate": null,
+      "summary": "Working on server-side APIs and frontend development",
       "responsibilities": [
-        "Developed back-end systems and APIs for Audit Trail Management System.",
-        "Collaborated with Business Analysts to understand project requirements.",
-        "Designed system architecture and participated in code reviews."
+        "Developed and optimized server-side APIs using Node.js and Express, implementing efficient data handling and caching strategies to improve response times",
+        "Implemented dynamic UI components and state management in the Next.js frontend, enhancing user experience and performance",
+        "Collaborated with senior developers to integrate RESTful APIs and handle authentication flows using JWT and OAuth for secure user access"
       ]
     },
     {
-      "name": "PT. Khatulistiwa Nusantara Indonesia (KHANSIA)",
-      "position": "Back-End Developer Intern",
-      "location_type": "Hybrid",
-      "location": "Bandung, Indonesia",
-      "url": "https://khansia.co.id",
-      "startDate": "2020-09-01",
-      "endDate": "2021-04-01",
-      "summary": "Assisted senior developers in building and maintaining back-end systems for mobile applications, gaining hands-on experience with back-end technologies.",
+      "name": "Plone Foundation",
+      "position": "Google Summer of Code 2024 Participant",
+      "location_type": "Remote",
+      "location": "Global",
+      "url": "https://github.com/collective/volto-hydra/tree/main",
+      "startDate": "2024-05-01",
+      "endDate": "2024-08-01",
+      "summary": "Created a proof-of-concept for using Volto as a decoupled editor for Plone through the Hydra project",
       "responsibilities": [
-        "Assisted in building and maintaining back-end systems for mobile applications.",
-        "Participated in Agile development processes including sprint planning and daily stand-ups.",
-        "Integrated back-end functionalities with front-end user interfaces."
+        "Created a proof-of-concept for using Volto as a decoupled editor for Plone through the Hydra project, allowing frontends built with any framework (React, Vue, etc.) to edit Plone content",
+        "Implemented a staged approach for frontend integration with Hydra's bridge, enabling basic editing experiences to full Volto-like inline editing",
+        "Developed functionalities for frontends to identify and manage editable blocks within the Hydra editor, including features like block selection, Quanta toolbar integration, and live content updates"
+      ]
+    },
+    {
+      "name": "Hybrid Additive Manufacturing (HAM) Lab, IIITDM Jabalpur",
+      "position": "Web Developer",
+      "location_type": "On-site",
+      "location": "Jabalpur, MP",
+      "url": "",
+      "startDate": "2023-09-01",
+      "endDate": "2023-12-01",
+      "summary": "Designed and developed a responsive landing website for the HAM lab",
+      "responsibilities": [
+        "Worked with a team of 8 to design and develop a responsive landing website for the HAM lab at IIITDM Jabalpur",
+        "Conducted user tests and gathered feedback to improve the site's performance and functionality, making it more user-friendly and informative"
       ]
     }
   ],
   "education": [
     {
-      "institution": "Your University",
-      "url": "https://university.edu",
-      "area": "Computer Science",
-      "studyType": "Bachelor",
-      "startDate": "2020-09-01",
-      "endDate": null,
-      "summary": "Focusing on software development and web technologies. Coursework includes Data Structures, Algorithms, Web Development, and Database Systems."
-    },
-    {
-      "institution": "Your High School",
-      "url": "https://highschool.edu",
-      "area": "Science",
-      "studyType": "High School",
-      "startDate": "2018-09-01",
-      "endDate": "2020-06-01",
-      "summary": "Completed with distinction, participated in various tech competitions and coding clubs."
+      "institution": "Indian Institute of Information Technology Jabalpur",
+      "url": "https://iiitdmj.ac.in/",
+      "area": "Smart Manufacturing",
+      "studyType": "Bachelor of Technology",
+      "startDate": "2021-08-01",
+      "endDate": "2025-05-01",
+      "summary": "CPI: 7.4"
     }
   ],
   "awards": [
     {
-      "title": "Hackathon Winner",
-      "date": "June 2023",
-      "awarder": "Tech Conference"
+      "title": "Plone Conference 2024 Speaker",
+      "date": "2024",
+      "awarder": "Plone Foundation",
+      "summary": "Invited as a speaker at the Plone Conference 2024 in Brasília, Brazil. Delivered a lightning talk on my GSoC journey with Plone and conducted a live demo showcasing the power of Hydra, a decoupled editor for Plone."
     },
     {
-      "title": "Outstanding Student Award",
-      "date": "May 2022",
-      "awarder": "University"
+      "title": "Bank of Baroda Hackathon Finalist",
+      "date": "2023",
+      "awarder": "Bank of Baroda",
+      "summary": "Our idea made it into the top 10 in the BoB hackathon."
+    },
+    {
+      "title": "LeetCode Achievement",
+      "date": "Ongoing",
+      "awarder": "LeetCode",
+      "summary": "Solved 750+ questions on LeetCode (Profile: HiPHEN001)"
     }
   ],
   "skills": {
-    "programming_languages": ["JavaScript", "TypeScript", "Python", "Java"],
-    "frameworks": ["React", "Next.js", "Express.js", "Django"],
-    "databases": ["MongoDB", "PostgreSQL", "MySQL"],
-    "tools": ["Git", "Docker", "AWS", "Figma"]
+    "programming_languages": ["C++", "JavaScript", "Python"],
+    "frameworks": ["React", "Node.js", "Express", "Next.js"],
+    "databases": ["MongoDB", "Firebase"],
+    "tools": ["Git", "Docker", "VS Code", "Unix/Linux"]
   },
   "projects": [
     {
-      "name": "Portfolio Website",
-      "description": "Personal portfolio website built with modern web technologies",
-      "url": "https://github.com/MAX-786/portfolio",
+      "name": "KYPE",
+      "description": "A web application for professor reviews",
+      "url": "https://kype.vercel.app/",
       "highlights": [
-        "Implemented responsive design with modern UI/UX principles",
-        "Optimized performance with lazy loading and code splitting"
+        "Developed React-based frontend for a KYPE web app, creating an intuitive and responsive user interface",
+        "Utilized MongoDB as the backend database for efficient storage and retrieval of professor reviews, ensuring scalability and optimal performance",
+        "Implemented robust features, including user authentication, search functionality, and review submission forms"
       ],
-      "technologies": ["React", "Next.js", "Tailwind CSS", "TypeScript"]
+      "technologies": ["React", "MaterialUI", "MongoDB", "Firebase", "Git"]
     },
     {
-      "name": "Task Manager",
-      "description": "Full-stack task management application",
-      "url": "https://github.com/MAX-786/task-manager",
+      "name": "Qissa the Story Bot",
+      "description": "A Discord bot for collaborative storytelling",
+      "url": "https://github.com/MAX-786/Qissa",
       "highlights": [
-        "Built RESTful API with authentication and authorization",
-        "Implemented real-time updates using WebSockets"
+        "Developed Qissa, a Discord bot using JavaScript and Discord.js",
+        "Enables story creation, collaboration, and timeline management within Discord servers",
+        "Users can initialize stories, contribute, create timelines, and add events"
       ],
-      "technologies": ["Node.js", "Express", "MongoDB", "React"]
+      "technologies": ["JavaScript", "Node.js", "MongoDB", "Git"]
     },
     {
-      "name": "Weather App",
-      "description": "Weather forecast application with location-based services",
-      "url": "https://github.com/MAX-786/weather-app",
+      "name": "Volto-Hydra",
+      "description": "A decoupled editor for Plone CMS",
+      "url": "https://github.com/collective/volto-hydra/tree/main",
       "highlights": [
-        "Integrated with multiple weather APIs for accurate forecasts",
-        "Implemented geolocation services for automatic location detection"
+        "Created a proof-of-concept for using Volto as a decoupled editor for Plone",
+        "Implemented a staged approach for frontend integration with Hydra's bridge",
+        "Developed functionalities for frontends to identify and manage editable blocks"
       ],
-      "technologies": ["JavaScript", "HTML", "CSS", "API Integration"]
-    },
-    {
-      "name": "E-commerce Platform",
-      "description": "Online shopping platform with product management",
-      "url": "https://github.com/MAX-786/ecommerce",
-      "highlights": [
-        "Implemented secure payment processing with Stripe",
-        "Built admin dashboard for inventory and order management"
-      ],
-      "technologies": ["React", "Node.js", "MongoDB", "Stripe API"]
-    },
-    {
-      "name": "Chat Application",
-      "description": "Real-time messaging application",
-      "url": "https://github.com/MAX-786/chat-app",
-      "highlights": [
-        "Implemented real-time messaging with Socket.io",
-        "Built user authentication and friend management system"
-      ],
-      "technologies": ["Node.js", "Socket.io", "React", "MongoDB"]
-    },
-    {
-      "name": "Recipe Finder",
-      "description": "Application to discover and save cooking recipes",
-      "url": "https://github.com/MAX-786/recipe-finder",
-      "highlights": [
-        "Integrated with food recipe APIs for extensive recipe database",
-        "Implemented user preference-based recommendation system"
-      ],
-      "technologies": ["JavaScript", "React", "API Integration"]
+      "technologies": ["React", "JavaScript", "Plone", "CMS"]
     }
   ]
 }
