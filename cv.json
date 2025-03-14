@@ -109,6 +109,25 @@
   },
   "projects": [
     {
+      "name": "Saveland",
+      "description": "Linux window management utility for layout preservation across desktop environments",
+      "url": "https://github.com/MAX-786/saveland",
+      "highlights": [
+        "Developed cross-desktop solution supporting both Hyprland (Wayland) and GNOME (X11) environments",
+        "Engineered low-level window manipulation using hyprctl JSON interface and X11 tools (wmctrl/xdotool)",
+        "Implemented workspace-aware window tracking with automatic environment detection",
+        "Solved complex edge cases for application-specific window management (terminals, browsers, IDEs)",
+        "Designed CLI interface with layout versioning and multi-instance application support"
+      ],
+      "technologies": [
+        "Bash",
+        "Python",
+        "Hyprland",
+        "X11/Wayland",
+        "Linux System Programming"
+      ]
+    },
+    {
       "name": "KYPE",
       "description": "A web application for professor reviews",
       "url": "https://kype.vercel.app/",
