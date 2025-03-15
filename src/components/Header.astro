@@ -3,15 +3,16 @@ import ThemeToggle from "./ThemeToggle.astro";
 import { Icon } from "astro-icon/components";
 import { SITE, LINKS } from "@/consts";
 import { cn } from "@/lib/utils";
+import AuthButtons from './auth/AuthButtons.astro';
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
 ---
 
 <header
   id="header"
-  class="fixed top-0 z-50 hidden h-16 w-full md:block print:hidden"
+  class="fixed top-0 z-40 w-full border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-black/80"
 >
-  <div class="container mx-auto h-full">
+  <div class="container mx-auto flex h-16 items-center justify-between px-4">
     <div class="relative flex h-full items-center justify-between">
       {/* Logo/Title */}
       <a
@@ -54,6 +55,9 @@ const subpath = pathname.match(/[^/]+/g);
         </a>
         <ThemeToggle id="headerThemeToggle" />
       </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <AuthButtons />
     </div>
   </div>
 </header>
