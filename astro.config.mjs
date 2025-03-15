@@ -9,6 +9,6 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   site: "https://mkhismkh.com",
   integrations: [react(), tailwind(), icon()],
-  output: "hybrid",
+  output: "server",
   adapter: vercel(),
 });
