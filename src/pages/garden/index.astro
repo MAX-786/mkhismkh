@@ -5,6 +5,9 @@ import GardenHeader from "@/components/garden/GardenHeader.astro";
 import TreeCard from "@/components/garden/TreeCard.astro";
 import { SITE } from "@/consts";
 import { trees } from "@garden";
+export const prerender = false;
+// For server-side rendering, we directly use the trees data
+// No need for getStaticPaths since we're not pre-rendering
 ---
 
 <BaseLayout

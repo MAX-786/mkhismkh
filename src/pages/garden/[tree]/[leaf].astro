@@ -4,17 +4,20 @@ import BackLink from "@/components/garden/BackLink.astro";
 import LeafHeader from "@/components/garden/LeafHeader.astro";
 import LeafContent from "@/components/garden/LeafContent.astro";
 import { trees, metadata } from "@garden";
+export const prerender = false;
+// For server-side rendering, get tree and leaf from params
+const { tree: treeSlug, leaf: leafSlug } = Astro.params;
 
-export function getStaticPaths() {
-  return trees.flatMap((tree) =>
-    tree.leaves.map((leaf) => ({
-      params: { tree: tree.slug, leaf: leaf.slug },
-      props: { tree, leaf },
-    })),
-  );
+// Find the tree and leaf
+const tree = trees.find((t) => t.slug === treeSlug);
+if (!tree) {
+  return Astro.redirect('/garden');
 }
 
-const { tree, leaf } = Astro.props;
+const leaf = tree.leaves.find((l) => l.slug === leafSlug);
+if (!leaf) {
+  return Astro.redirect(`/garden/${treeSlug}`);
+}
 ---
 
 <BaseLayout title={leaf.title} description={leaf.content.substring(0, 150)}>

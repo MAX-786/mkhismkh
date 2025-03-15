@@ -6,15 +6,15 @@ import GardenHeader from "@/components/garden/GardenHeader.astro";
 import LeafCard from "@/components/garden/LeafCard.astro";
 import { SITE } from "@/consts";
 import { trees, metadata } from "@garden";
+export const prerender = false;
+// For server-side rendering, we need to get the tree from the params
+const { tree: treeSlug } = Astro.params;
+const tree = trees.find((t) => t.slug === treeSlug);
 
-export function getStaticPaths() {
-  return trees.map((tree) => ({
-    params: { tree: tree.slug },
-    props: { tree },
-  }));
+// Handle case where tree doesn't exist
+if (!tree) {
+  return Astro.redirect('/garden');
 }
-
-const { tree } = Astro.props;
 ---
 
 <BaseLayout title={tree.name} description={tree.description}>
@@ -23,11 +23,9 @@ const { tree } = Astro.props;
     <GardenHeader title={tree.name} description={tree.description} />
 
     <div class="space-y-6">
-      {
-        tree.leaves.map((leaf) => (
-          <LeafCard leaf={leaf} treeSlug={tree.slug} metadata={metadata} />
-        ))
-      }
+      {tree.leaves.map((leaf) => (
+        <LeafCard leaf={leaf} treeSlug={tree.slug} metadata={metadata} />
+      ))}
     </div>
   </div>
 </BaseLayout>
