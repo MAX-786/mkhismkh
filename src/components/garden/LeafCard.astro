@@ -4,7 +4,7 @@ type Props = {
     title: string;
     slug: string;
     content: string;
-    growthStage: string;
+    growth_stage: string;
     tags: string[];
     date: string;
   };
@@ -30,14 +30,14 @@ const { leaf, treeSlug, metadata } = Astro.props;
         <span
           class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10"
         >
-          {leaf.growthStage}
+          {leaf.growth_stage}
         </span>
         <div
           class="absolute bottom-full right-0 mb-2 w-48 rounded-md bg-black/90 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-white/90 dark:text-black"
         >
           {
             metadata?.growthStages?.find(
-              (stage) => stage.name === leaf.growthStage,
+              (stage) => stage.name === leaf.growth_stage,
             )?.description || "A stage in the growth process"
           }
         </div>

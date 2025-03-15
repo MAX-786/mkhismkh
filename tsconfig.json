@@ -4,7 +4,6 @@
     "baseUrl": ".",
     "paths": {
       "@cv": ["./cv.json"],
-      "@garden": ["./garden.json"],
       "@/*": ["src/*"]
     },
     "jsx": "react-jsx",

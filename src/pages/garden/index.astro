@@ -1,13 +1,32 @@
 ---
-import Heading from "@/components/Heading.astro";
+export const prerender = false;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import TreeCard from "@/components/garden/TreeCard.astro";
-import { SITE } from "@/consts";
-import { trees } from "@garden";
-export const prerender = false;
-// For server-side rendering, we directly use the trees data
-// No need for getStaticPaths since we're not pre-rendering
+import { createClient } from '@supabase/supabase-js';
+
+// Create a Supabase client using your public URL and anon key
+const supabaseUrl = import.meta.env.SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Fetch trees with their leaves and nested leaf references
+const { data: treesData, error } = await supabase
+  .from('trees')
+  .select(`
+    *,
+    leaves (
+      *,
+      leaf_references (*)
+    )
+  `);
+
+if (error) {
+  console.error("Error fetching trees:", error);
+  // Optionally, you could set treesData to an empty array or show an error message
+}
+
+const trees = treesData ?? [];
 ---
 
 <BaseLayout

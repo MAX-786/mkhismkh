@@ -1,32 +1,68 @@
 ---
+export const prerender = false;
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import BackLink from "@/components/garden/BackLink.astro";
 import LeafHeader from "@/components/garden/LeafHeader.astro";
 import LeafContent from "@/components/garden/LeafContent.astro";
-import { trees, metadata } from "@garden";
-export const prerender = false;
-// For server-side rendering, get tree and leaf from params
+import { createClient } from '@supabase/supabase-js';
+
+// Create a Supabase client using environment variables
+const supabaseUrl = import.meta.env.SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Get the tree and leaf slugs from the URL parameters
 const { tree: treeSlug, leaf: leafSlug } = Astro.params;
 
-// Find the tree and leaf
-const tree = trees.find((t) => t.slug === treeSlug);
-if (!tree) {
+// Query the tree with its embedded leaves and leaf references
+const { data: tree, error: treeError } = await supabase
+  .from('trees')
+  .select(`
+    *,
+    leaves (
+      *,
+      leaf_references (*)
+    )
+  `)
+  .eq('slug', treeSlug)
+  .single();
+
+if (treeError || !tree) {
+  console.error("Error fetching tree:", treeError);
   return Astro.redirect('/garden');
 }
 
-const leaf = tree.leaves.find((l) => l.slug === leafSlug);
+// Query metadata from the growth_stages table
+const { data: metadataData, error: metadataError } = await supabase
+  .from('growth_stages')
+  .select('*');
+
+if (metadataError) {
+  console.error("Error fetching metadata:", metadataError);
+}
+
+// Wrap the metadata to match the expected type shape
+const metadata = { growthStages: metadataData ?? [] };
+
+// Find the specific leaf by matching the leaf slug
+const leaf = tree.leaves.find((l : any) => l.slug === leafSlug);
 if (!leaf) {
   return Astro.redirect(`/garden/${treeSlug}`);
 }
 ---
-
 <BaseLayout title={leaf.title} description={leaf.content.substring(0, 150)}>
   <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
     <BackLink href={`/garden/${tree.slug}`} text={`Back to ${tree.name}`} />
 
     <article class="prose prose-lg max-w-none dark:prose-invert">
-      <LeafHeader leaf={leaf} metadata={metadata} />
-      <LeafContent content={leaf.content} references={leaf.references} />
+      <LeafHeader 
+        leaf={leaf} 
+        metadata={metadata} 
+      />
+      <LeafContent 
+        content={leaf.content} 
+        references={leaf.leaf_references} 
+      />
     </article>
   </div>
 </BaseLayout>
