@@ -85,3 +85,23 @@ export const updateLeaf = async (
   const supabase = createSupabaseClient();
   return await supabase.from("leaves").update(leaf).eq("id", id);
 };
+
+export const deleteTree = async (id: number) => {
+  const supabase = createSupabaseClient();
+  return await supabase.from("trees").delete().eq("id", id);
+};
+
+export const deleteLeaf = async (id: number) => {
+  const supabase = createSupabaseClient();
+  return await supabase.from("leaves").delete().eq("id", id);
+};
+
+export const deleteMultipleTrees = async (ids: number[]) => {
+  const supabase = createSupabaseClient();
+  return await supabase.from("trees").delete().in("id", ids);
+};
+
+export const deleteMultipleLeaves = async (ids: number[]) => {
+  const supabase = createSupabaseClient();
+  return await supabase.from("leaves").delete().in("id", ids);
+};

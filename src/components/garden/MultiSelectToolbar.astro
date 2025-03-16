@@ -1,0 +1,136 @@
+---
+const { type, treeSlug } = Astro.props;
+
+const confirmMessage = type === "tree" 
+  ? "Are you sure you want to delete the selected trees? This will also delete all leaves within them."
+  : "Are you sure you want to delete the selected leaves?";
+
+const redirectUrl = type === "tree" 
+  ? "/garden" 
+  : `/garden/${treeSlug}`;
+---
+
+<div 
+  id="multi-select-toolbar" 
+  class="fixed left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 border border-black/10 dark:border-white/10 transform scale-0 opacity-0 transition-all duration-300 top-4 sm:top-auto sm:bottom-4"
+  data-type={type}
+  data-tree-slug={treeSlug}
+  data-redirect={redirectUrl}
+>
+  <span class="text-sm font-medium"><span id="selected-count">0</span> selected</span>
+  
+  <div class="h-5 w-px bg-black/10 dark:bg-white/10"></div>
+  
+  <button
+    id="cancel-selection"
+    class="text-sm text-black/70 hover:text-black dark:text-white/70 dark:hover:text-white"
+  >
+    Cancel
+  </button>
+  
+  <button
+    id="delete-selected"
+    class="ml-auto flex items-center gap-1 rounded-md bg-red-500 px-3 py-1.5 text-sm text-white hover:bg-red-600"
+    data-confirm={confirmMessage}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-4 w-4"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    Delete Selected
+  </button>
+</div>
+
+<script>
+  // Add type declaration for the window object
+  declare global {
+    interface Window {
+      updateMultiSelectToolbar: (count: number) => void;
+    }
+  }
+
+  function setupMultiSelectToolbar() {
+    const toolbar: any = document.getElementById('multi-select-toolbar');
+    if (!toolbar || toolbar._initialized) return;
+    toolbar._initialized = true;
+    
+    const selectedCount = document.getElementById('selected-count');
+    const cancelButton = document.getElementById('cancel-selection');
+    const deleteButton = document.getElementById('delete-selected');
+    
+    const type = toolbar.dataset.type;
+    const treeSlug = toolbar.dataset.treeSlug;
+    const redirectUrl = toolbar.dataset.redirect;
+    
+    // Function to update the toolbar state
+    window.updateMultiSelectToolbar = (count: number) => {
+      if (count > 0) {
+        toolbar.classList.remove('scale-0', 'opacity-0');
+        toolbar.classList.add('scale-100', 'opacity-100');
+        if (selectedCount) selectedCount.textContent = count.toString();
+      } else {
+        toolbar.classList.add('scale-0', 'opacity-0');
+        toolbar.classList.remove('scale-100', 'opacity-100');
+      }
+    };
+    
+    // Cancel selection
+    cancelButton?.addEventListener('click', () => {
+      document.querySelectorAll('.selectable-item input[type="checkbox"]').forEach(checkbox => {
+        (checkbox as HTMLInputElement).checked = false;
+      });
+      document.querySelectorAll('.selectable-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      window.updateMultiSelectToolbar(0);
+    });
+    
+    // Delete selected items
+    deleteButton?.addEventListener('click', async () => {
+      const confirmMessage = deleteButton.dataset.confirm;
+      if (!confirmMessage) return;
+      
+      if (confirm(confirmMessage)) {
+        const selectedIds = Array.from(document.querySelectorAll('.selectable-item.selected'))
+          .map(item => parseInt((item as HTMLElement).dataset.id || '0'))
+          .filter(id => id > 0);
+        
+        if (selectedIds.length === 0) return;
+        
+        try {
+          const response = await fetch(`/api/garden/delete-multiple`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ids: selectedIds,
+              type
+            }),
+          });
+          
+          if (response.ok) {
+            window.location.href = redirectUrl || '/garden';
+          } else {
+            alert('Failed to delete selected items. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error deleting:', error);
+          alert('An error occurred. Please try again.');
+        }
+      }
+    });
+  }
+
+  // Run on initial load and after Astro page transitions
+  document.addEventListener('DOMContentLoaded', setupMultiSelectToolbar);
+  document.addEventListener('astro:page-load', setupMultiSelectToolbar);
+</script>

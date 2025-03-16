@@ -1,5 +1,6 @@
 ---
 import EditButton from "./EditButton.astro";
+import DeleteButton from "./DeleteButton.astro";
 
 type Props = {
   title: string;
@@ -16,7 +17,12 @@ const { title, description, tree } = Astro.props;
 <header class="mb-12">
   <div class="flex items-center gap-3 mb-4">
     <h1 class="text-4xl font-bold">{title}</h1>
-    {tree && <EditButton type="tree" id={tree.id} slug={tree.slug} />}
+    {tree && (
+      <div class="flex items-center gap-1">
+        <EditButton type="tree" id={tree.id} slug={tree.slug} />
+        <DeleteButton type="tree" id={tree.id} slug={tree.slug} />
+      </div>
+    )}
   </div>
   <p class="text-lg text-black/80 dark:text-white/80">{description}</p>
 </header>

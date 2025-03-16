@@ -1,5 +1,6 @@
 ---
 import EditButton from "./EditButton.astro";
+import DeleteButton from "./DeleteButton.astro";
 
 type Props = {
   leaf: {
@@ -25,7 +26,10 @@ const { leaf, treeSlug, metadata } = Astro.props;
 <header class="not-prose mb-8">
   <div class="flex items-center gap-3 mb-4">
     <h1 class="text-3xl font-bold">{leaf.title}</h1>
-    <EditButton type="leaf" id={leaf.id} slug={leaf.slug} treeSlug={treeSlug} />
+    <div class="flex items-center gap-1">
+      <EditButton type="leaf" id={leaf.id} slug={leaf.slug} treeSlug={treeSlug} />
+      <DeleteButton type="leaf" id={leaf.id} slug={leaf.slug} treeSlug={treeSlug} />
+    </div>
   </div>
   <div class="mt-4 flex flex-wrap items-center gap-4">
     <div class="flex items-center">

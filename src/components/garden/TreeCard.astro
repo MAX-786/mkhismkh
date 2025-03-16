@@ -1,5 +1,6 @@
 ---
 import EditButton from "./EditButton.astro";
+import DeleteButton from "./DeleteButton.astro";
 
 type Props = {
   tree: {
@@ -15,11 +16,24 @@ const { tree } = Astro.props;
 ---
 
 <div
-  class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
+  class="selectable-item rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
+  data-id={tree.id}
 >
   <div class="flex items-center justify-between mb-2">
-    <h3 class="text-xl font-bold">{tree.name}</h3>
-    <EditButton type="tree" id={tree.id} slug={tree.slug} />
+    <div class="flex items-center gap-2">
+      <div class="select-checkbox hidden">
+        <input 
+          type="checkbox" 
+          id={`tree-${tree.id}`} 
+          class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+      </div>
+      <h3 class="text-xl font-bold">{tree.name}</h3>
+    </div>
+    <div class="flex items-center gap-1">
+      <EditButton type="tree" id={tree.id} slug={tree.slug} />
+      <DeleteButton type="tree" id={tree.id} slug={tree.slug} />
+    </div>
   </div>
   <p class="mb-4 text-black/80 dark:text-white/80">
     {tree.description}

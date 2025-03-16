@@ -5,6 +5,7 @@ import BackLink from "@/components/garden/BackLink.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import LeafCard from "@/components/garden/LeafCard.astro";
 import AddButton from "@/components/garden/AddButton.astro";
+import MultiSelectToolbar from "@/components/garden/MultiSelectToolbar.astro";
 import { createClient } from "@supabase/supabase-js";
 
 // Create a Supabase client using environment variables
@@ -51,14 +52,24 @@ const metadata = { growthStages: metadataData ?? [] };
 <BaseLayout title={tree.name} description={tree.description}>
   <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
     <BackLink href="/garden/" text="Back to Garden" />
-    <GardenHeader
-      title={tree.name}
-      description={tree.description}
-      tree={{
-        id: tree.id,
-        slug: tree.slug,
-      }}
-    />
+    
+    <div class="flex justify-between items-center mb-6">
+      <GardenHeader
+        title={tree.name}
+        description={tree.description}
+        tree={{
+          id: tree.id,
+          slug: tree.slug,
+        }}
+      />
+      
+      <button
+        id="toggle-select-mode"
+        class="px-3 py-1.5 rounded-md border border-black/20 text-black/70 hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:bg-white/5"
+      >
+        Select
+      </button>
+    </div>
 
     <div class="space-y-6">
       {
@@ -72,5 +83,40 @@ const metadata = { growthStages: metadataData ?? [] };
         <AddButton type="leaf" treeSlug={tree.slug} />
       </div>
     </div>
+    
+    <!-- Multi-select toolbar -->
+    <MultiSelectToolbar type="leaf" treeSlug={tree.slug} />
   </div>
 </BaseLayout>
+
+<script>
+  function setupSelectMode() {
+    const toggleButton: any = document.getElementById('toggle-select-mode');
+    if (!toggleButton || toggleButton._initialized) return;
+    toggleButton._initialized = true;
+    
+    let selectMode = false;
+    
+    toggleButton.addEventListener('click', () => {
+      selectMode = !selectMode;
+      toggleButton.textContent = selectMode ? 'Cancel' : 'Select';
+      
+      const selectCheckboxes = document.querySelectorAll('.select-checkbox');
+      selectCheckboxes.forEach(checkbox => {
+        checkbox.classList.toggle('hidden', !selectMode);
+      });
+      
+      if (!selectMode) {
+        // Uncheck all checkboxes when exiting select mode
+        document.querySelectorAll('.selectable-item input[type="checkbox"]').forEach(checkbox => {
+          (checkbox as HTMLInputElement).checked = false;
+        });
+        document.querySelectorAll('.selectable-item').forEach(item => {
+          item.classList.remove('!bg-green-100', '!dark:bg-green-900');
+        });
+      }
+    });
+  }
+
+  setupSelectMode();
+</script>
