@@ -1,5 +1,5 @@
 ---
-import EditButton from './EditButton.astro';
+import EditButton from "./EditButton.astro";
 
 type Props = {
   leaf: {
@@ -29,12 +29,15 @@ const { leaf, treeSlug, metadata } = Astro.props;
   <div class="mb-2 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <h3 class="text-lg font-bold">{leaf.title}</h3>
-      <EditButton type="leaf" id={leaf.id} slug={leaf.slug} treeSlug={treeSlug} />
+      <EditButton
+        type="leaf"
+        id={leaf.id}
+        slug={leaf.slug}
+        treeSlug={treeSlug}
+      />
     </div>
     <div class="relative group">
-      <span
-        class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10"
-      >
+      <span class="rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10">
         {leaf.growth_stage}
       </span>
       <div

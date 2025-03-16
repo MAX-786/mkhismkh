@@ -1,12 +1,12 @@
-import { createClerkClient } from '@clerk/clerk-sdk-node';
+import { createClerkClient } from "@clerk/clerk-sdk-node";
 
 // Initialize Clerk client with your secret key
 const clerk = createClerkClient({
-  secretKey: import.meta.env.CLERK_SECRET_KEY
+  secretKey: import.meta.env.CLERK_SECRET_KEY,
 });
 
 // List of admin user IDs from Clerk
-export const ADMIN_USER_IDS = import.meta.env.ADMIN_USER_IDS.split(',');
+export const ADMIN_USER_IDS = import.meta.env.ADMIN_USER_IDS.split(",");
 
 // Check if a user is an admin
 export async function isUserAdmin(userId: string | null): Promise<boolean> {

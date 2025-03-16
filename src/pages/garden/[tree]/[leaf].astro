@@ -4,7 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import BackLink from "@/components/garden/BackLink.astro";
 import LeafHeader from "@/components/garden/LeafHeader.astro";
 import LeafContent from "@/components/garden/LeafContent.astro";
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 // Create a Supabase client using environment variables
 const supabaseUrl = import.meta.env.SUPABASE_URL;
@@ -12,30 +12,32 @@ const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Get the tree and leaf slugs from the URL parameters
-const { tree: treeSlug, leaf: leafSlug } : any = Astro.params;
+const { tree: treeSlug, leaf: leafSlug }: any = Astro.params;
 
 // Query the tree with its embedded leaves and leaf references
 const { data: tree, error: treeError } = await supabase
-  .from('trees')
-  .select(`
+  .from("trees")
+  .select(
+    `
     *,
     leaves (
       *,
       leaf_references (*)
     )
-  `)
-  .eq('slug', treeSlug)
+  `,
+  )
+  .eq("slug", treeSlug)
   .single();
 
 if (treeError || !tree) {
   console.error("Error fetching tree:", treeError);
-  return Astro.redirect('/garden');
+  return Astro.redirect("/garden");
 }
 
 // Query metadata from the growth_stages table
 const { data: metadataData, error: metadataError } = await supabase
-  .from('growth_stages')
-  .select('*');
+  .from("growth_stages")
+  .select("*");
 
 if (metadataError) {
   console.error("Error fetching metadata:", metadataError);
@@ -43,46 +45,40 @@ if (metadataError) {
 
 // Wrap the metadata to match the expected type shape
 const metadata = {
-    "growthStages": [
-      {
-        "name": "seedling",
-        "description": "Initial thoughts or ideas that are still forming"
-      },
-      {
-        "name": "budding",
-        "description": "Ideas that are taking shape but need more development"
-      },
-      {
-        "name": "growing",
-        "description": "Well-developed thoughts that continue to evolve"
-      },
-      {
-        "name": "evergreen",
-        "description": "Mature, well-tested ideas that remain relevant over time"
-      }
-    ]
-  }
+  growthStages: [
+    {
+      name: "seedling",
+      description: "Initial thoughts or ideas that are still forming",
+    },
+    {
+      name: "budding",
+      description: "Ideas that are taking shape but need more development",
+    },
+    {
+      name: "growing",
+      description: "Well-developed thoughts that continue to evolve",
+    },
+    {
+      name: "evergreen",
+      description: "Mature, well-tested ideas that remain relevant over time",
+    },
+  ],
+};
 
 // Find the specific leaf by matching the leaf slug
-const leaf = tree.leaves.find((l : any) => l.slug === leafSlug);
+const leaf = tree.leaves.find((l: any) => l.slug === leafSlug);
 if (!leaf) {
   return Astro.redirect(`/garden/${treeSlug}`);
 }
 ---
+
 <BaseLayout title={leaf.title} description={leaf.content.substring(0, 150)}>
   <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
     <BackLink href={`/garden/${tree.slug}`} text={`Back to ${tree.name}`} />
 
     <article class="prose prose-lg max-w-none dark:prose-invert">
-      <LeafHeader 
-        leaf={leaf} 
-        treeSlug={treeSlug}
-        metadata={metadata} 
-      />
-      <LeafContent 
-        content={leaf.content} 
-        references={leaf.leaf_references} 
-      />
+      <LeafHeader leaf={leaf} treeSlug={treeSlug} metadata={metadata} />
+      <LeafContent content={leaf.content} references={leaf.leaf_references} />
     </article>
   </div>
 </BaseLayout>

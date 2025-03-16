@@ -5,7 +5,7 @@ import BackLink from "@/components/garden/BackLink.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import LeafCard from "@/components/garden/LeafCard.astro";
 import AddButton from "@/components/garden/AddButton.astro";
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 // Create a Supabase client using environment variables
 const supabaseUrl = import.meta.env.SUPABASE_URL;
@@ -17,26 +17,28 @@ const { tree: treeSlug } = Astro.params;
 
 // Query the tree with its embedded leaves and leaf references
 const { data: tree, error } = await supabase
-  .from('trees')
-  .select(`
+  .from("trees")
+  .select(
+    `
     *,
     leaves (
       *,
       leaf_references (*)
     )
-  `)
-  .eq('slug', treeSlug)
+  `,
+  )
+  .eq("slug", treeSlug)
   .single();
 
 if (error || !tree) {
   console.error("Error fetching tree:", error);
-  return Astro.redirect('/garden');
+  return Astro.redirect("/garden");
 }
 
 // Query metadata from the growth_stages table
 const { data: metadataData, error: metadataError } = await supabase
-  .from('growth_stages')
-  .select('*');
+  .from("growth_stages")
+  .select("*");
 
 if (metadataError) {
   console.error("Error fetching metadata:", metadataError);
@@ -45,27 +47,26 @@ if (metadataError) {
 // Wrap the metadata to match the expected type shape
 const metadata = { growthStages: metadataData ?? [] };
 ---
+
 <BaseLayout title={tree.name} description={tree.description}>
   <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
     <BackLink href="/garden/" text="Back to Garden" />
-    <GardenHeader 
-      title={tree.name} 
-      description={tree.description} 
+    <GardenHeader
+      title={tree.name}
+      description={tree.description}
       tree={{
         id: tree.id,
-        slug: tree.slug
+        slug: tree.slug,
       }}
     />
 
     <div class="space-y-6">
-      {tree.leaves.map((leaf : any) => (
-        <LeafCard 
-          leaf={leaf} 
-          treeSlug={tree.slug} 
-          metadata={metadata} 
-        />
-      ))}
-      
+      {
+        tree.leaves.map((leaf: any) => (
+          <LeafCard leaf={leaf} treeSlug={tree.slug} metadata={metadata} />
+        ))
+      }
+
       <!-- Add Leaf Button -->
       <div class="h-[120px]">
         <AddButton type="leaf" treeSlug={tree.slug} />

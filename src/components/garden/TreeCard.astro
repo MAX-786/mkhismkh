@@ -1,5 +1,5 @@
 ---
-import EditButton from './EditButton.astro';
+import EditButton from "./EditButton.astro";
 
 type Props = {
   tree: {
@@ -28,7 +28,7 @@ const { tree } = Astro.props;
     <span class="text-sm text-black/60 dark:text-white/60">
       {tree.leaves.length} leaves
     </span>
-    <a 
+    <a
       href={`/garden/${tree.slug}`}
       class="text-sm font-medium text-black/80 transition-transform duration-300 hover:translate-x-1 dark:text-white/80"
     >

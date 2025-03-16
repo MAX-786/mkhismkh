@@ -2,79 +2,79 @@
 export const prerender = false;
 import FormLayout from "@/components/garden/admin/FormLayout.astro";
 import TreeForm from "@/components/garden/admin/TreeForm.astro";
-import { isUserAdmin } from '@/lib/auth';
-import { getTree, updateTree } from '@/lib/supabase';
+import { isUserAdmin } from "@/lib/auth";
+import { getTree, updateTree } from "@/lib/supabase";
 
 // Check if user is admin
 const { userId } = Astro.locals.auth();
 const isAdmin = await isUserAdmin(userId);
 
 if (!isAdmin) {
-  return Astro.redirect('/garden');
+  return Astro.redirect("/garden");
 }
 
 // Get tree slug from params
-const { tree: treeSlug } : any = Astro.params;
+const { tree: treeSlug }: any = Astro.params;
 
 // Get tree data
 const { data: tree, error: treeError } = await getTree(treeSlug);
 
 if (treeError || !tree) {
   console.error("Error fetching tree:", treeError);
-  return Astro.redirect('/garden');
+  return Astro.redirect("/garden");
 }
 
-let formError = '';
+let formError = "";
 
 // Handle form submission
-if (Astro.request.method === 'POST') {
+if (Astro.request.method === "POST") {
   try {
     const formData = await Astro.request.formData();
-    const name = formData.get('name')?.toString();
-    const slug = formData.get('slug')?.toString();
-    const description = formData.get('description')?.toString();
-    
+    const name = formData.get("name")?.toString();
+    const slug = formData.get("slug")?.toString();
+    const description = formData.get("description")?.toString();
+
     // Validate inputs
     if (!name || !slug || !description) {
-      formError = 'All fields are required';
+      formError = "All fields are required";
     } else {
       // Update tree
       const { error } = await updateTree(tree.id, { name, slug, description });
-      
+
       if (error) throw error;
-      
+
       // Redirect to the tree page (using new slug in case it changed)
       return Astro.redirect(`/garden/${slug}`);
     }
   } catch (error) {
-    console.error('Error updating tree:', error);
-    formError = 'An error occurred while updating the tree';
+    console.error("Error updating tree:", error);
+    formError = "An error occurred while updating the tree";
   }
 }
 ---
 
-<FormLayout 
-  title="Edit Tree" 
+<FormLayout
+  title="Edit Tree"
   description="Update this tree in your digital garden"
   backLink={`/garden/${treeSlug}`}
   backText={`Back to ${tree.name}`}
 >
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-medium">Edit Tree Details</h2>
-    <a 
+    <a
       href={`/garden/${treeSlug}`}
       class="px-4 py-2 rounded-md border border-black/20 text-black/70 hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:bg-white/5"
     >
       Cancel
     </a>
   </div>
-  
-  <TreeForm 
-    formError={formError} 
+
+  <TreeForm
+    formError={formError}
     initialData={{
       name: tree.name,
       slug: tree.slug,
-      description: tree.description
+      description: tree.description,
     }}
     submitLabel="Update Tree"
   />

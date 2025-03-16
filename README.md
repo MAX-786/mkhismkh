@@ -36,23 +36,26 @@ This project uses the following technologies:
 ### Getting Started
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/MAX-786/mkhismkh.git
    cd mkhismkh
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 3. Set up environment variables:
    Create a `.env` file in the root directory with the following variables:
+
    ```
    # Supabase
    SUPABASE_URL=your_supabase_url
    SUPABASE_KEY=your_supabase_anon_key
-   
+
    # Clerk
    PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
    CLERK_SECRET_KEY=your_clerk_secret_key
@@ -107,6 +110,7 @@ All commands are run from the root of the project, from a terminal:
 ## Update CHANGELOG
 
 ### Types of changes
+
 - `Added` for new features.
 - `Changed` for changes in existing functionality.
 - `Deprecated` for soon-to-be removed features.

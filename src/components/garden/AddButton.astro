@@ -1,24 +1,29 @@
 ---
-import { SignedIn } from '@clerk/astro/components';
-import { isUserAdmin } from '@/lib/auth';
+import { SignedIn } from "@clerk/astro/components";
+import { isUserAdmin } from "@/lib/auth";
 
 const { userId } = Astro.locals.auth();
 const isAdmin = await isUserAdmin(userId);
 const { type, treeSlug } = Astro.props;
 
 // Determine the link based on the type (tree or leaf)
-const href = type === 'tree' 
-  ? '/garden/admin/tree/new' 
-  : `/garden/admin/tree/${treeSlug}/leaf/new`;
+const href =
+  type === "tree"
+    ? "/garden/admin/tree/new"
+    : `/garden/admin/tree/${treeSlug}/leaf/new`;
 ---
 
-{isAdmin && (
-  <SignedIn>
-    <a 
-      href={href}
-      class="group flex aspect-square h-full w-full items-center justify-center rounded-lg border border-dashed border-black/25 bg-white/50 transition-all duration-300 hover:border-black/50 hover:bg-white/80 dark:border-white/25 dark:bg-black/30 dark:hover:border-white/50 dark:hover:bg-black/50"
-    >
-      <span class="text-4xl text-black/50 transition-all duration-300 group-hover:scale-110 group-hover:text-black dark:text-white/50 dark:group-hover:text-white">+</span>
-    </a>
-  </SignedIn>
-)}
+{
+  isAdmin && (
+    <SignedIn>
+      <a
+        href={href}
+        class="group flex aspect-square h-full w-full items-center justify-center rounded-lg border border-dashed border-black/25 bg-white/50 transition-all duration-300 hover:border-black/50 hover:bg-white/80 dark:border-white/25 dark:bg-black/30 dark:hover:border-white/50 dark:hover:bg-black/50"
+      >
+        <span class="text-4xl text-black/50 transition-all duration-300 group-hover:scale-110 group-hover:text-black dark:text-white/50 dark:group-hover:text-white">
+          +
+        </span>
+      </a>
+    </SignedIn>
+  )
+}

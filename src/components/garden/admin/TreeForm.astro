@@ -13,26 +13,30 @@ const { formError, initialData, submitLabel = "Create Tree" } = Astro.props;
 ---
 
 <form method="POST" class="space-y-6">
-  {formError && <div class="p-3 bg-red-100 text-red-800 rounded-md">{formError}</div>}
-  
+  {
+    formError && (
+      <div class="p-3 bg-red-100 text-red-800 rounded-md">{formError}</div>
+    )
+  }
+
   <div>
     <label for="name" class="block text-sm font-medium">Name</label>
-    <input 
-      type="text" 
-      id="name" 
-      name="name" 
+    <input
+      type="text"
+      id="name"
+      name="name"
       required
       value={initialData?.name || ""}
       class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
     />
   </div>
-  
+
   <div>
     <label for="slug" class="block text-sm font-medium">Slug</label>
-    <input 
-      type="text" 
-      id="slug" 
-      name="slug" 
+    <input
+      type="text"
+      id="slug"
+      name="slug"
       required
       value={initialData?.slug || ""}
       pattern="[a-z0-9-]+"
@@ -42,20 +46,23 @@ const { formError, initialData, submitLabel = "Create Tree" } = Astro.props;
       Only lowercase letters, numbers, and hyphens
     </p>
   </div>
-  
+
   <div>
-    <label for="description" class="block text-sm font-medium">Description</label>
-    <textarea 
-      id="description" 
-      name="description" 
-      rows="4" 
+    <label for="description" class="block text-sm font-medium"
+      >Description</label
+    >
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
       required
       class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
-    >{initialData?.description || ""}</textarea>
+      >{initialData?.description || ""}</textarea
+    >
   </div>
-  
+
   <div>
-    <button 
+    <button
       type="submit"
       class="rounded-md bg-black px-4 py-2 text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
     >
@@ -65,43 +72,43 @@ const { formError, initialData, submitLabel = "Create Tree" } = Astro.props;
 </form>
 
 <script define:vars={{ initialData }}>
-  document.addEventListener('DOMContentLoaded', initializeForm);
-  document.addEventListener('astro:page-load', initializeForm);
-  
+  document.addEventListener("DOMContentLoaded", initializeForm);
+  document.addEventListener("astro:page-load", initializeForm);
+
   function initializeForm() {
-    const nameInput = document.getElementById('name');
-    const slugInput = document.getElementById('slug');
-    
+    const nameInput = document.getElementById("name");
+    const slugInput = document.getElementById("slug");
+
     if (!nameInput || !slugInput || nameInput._initialized) return;
-    
+
     nameInput._initialized = true;
-    
+
     // Only auto-generate slug if we're creating a new tree (no initial data)
     // or if the slug field is empty
     const shouldAutoGenerateSlug = !initialData || !initialData.slug;
-    
+
     if (!shouldAutoGenerateSlug) return;
-    
+
     // Generate slug from name
     const generateSlug = (name) => {
       return name
         .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
         .trim();
     };
-    
+
     // Auto-generate slug when name changes
-    nameInput.addEventListener('blur', () => {
+    nameInput.addEventListener("blur", () => {
       if (nameInput.value && !slugInput.value) {
         slugInput.value = generateSlug(nameInput.value);
       }
     });
-    
+
     // Also generate slug when Enter is pressed in name field
-    nameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
         e.preventDefault();
         slugInput.value = generateSlug(nameInput.value);
         slugInput.focus();

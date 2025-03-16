@@ -3,12 +3,12 @@ import ThemeToggle from "./ThemeToggle.astro";
 import { Icon } from "astro-icon/components";
 import { SITE, LINKS } from "@/consts";
 import { cn } from "@/lib/utils";
-import AuthButtons from './auth/AuthButtons.astro';
+import AuthButtons from "./auth/AuthButtons.astro";
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
 
 // Check if we're on a garden page
-const isGardenPage = pathname.startsWith('/garden');
+const isGardenPage = pathname.startsWith("/garden");
 ---
 
 <header
