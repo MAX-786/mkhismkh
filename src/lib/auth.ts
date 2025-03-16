@@ -1,4 +1,4 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { createClerkClient } from "@clerk/express";
 
 // Initialize Clerk client with your secret key
 const clerk = createClerkClient({
