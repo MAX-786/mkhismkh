@@ -3,9 +3,12 @@ import ThemeToggle from "./ThemeToggle.astro";
 import { Icon } from "astro-icon/components";
 import { SITE, LINKS } from "@/consts";
 import { cn } from "@/lib/utils";
-
+import AuthButtons from './auth/AuthButtons.astro';
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
+
+// Check if we're on a garden page
+const isGardenPage = pathname.startsWith('/garden');
 ---
 
 <div class="fixed bottom-2 left-1/2 z-50 block h-16 -translate-x-1/2 sm:hidden">
@@ -47,6 +50,7 @@ const subpath = pathname.match(/[^/]+/g);
           <Icon name="github" class="block size-full" />
         </a>
         <ThemeToggle id="navbarThemeToggle" />
+        {isGardenPage && <AuthButtons />}
       </div>
     </div>
   </div>
