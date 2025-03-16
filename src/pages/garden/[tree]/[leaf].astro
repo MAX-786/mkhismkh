@@ -42,7 +42,26 @@ if (metadataError) {
 }
 
 // Wrap the metadata to match the expected type shape
-const metadata = { growthStages: metadataData ?? [] };
+const metadata = {
+    "growthStages": [
+      {
+        "name": "seedling",
+        "description": "Initial thoughts or ideas that are still forming"
+      },
+      {
+        "name": "budding",
+        "description": "Ideas that are taking shape but need more development"
+      },
+      {
+        "name": "growing",
+        "description": "Well-developed thoughts that continue to evolve"
+      },
+      {
+        "name": "evergreen",
+        "description": "Mature, well-tested ideas that remain relevant over time"
+      }
+    ]
+  }
 
 // Find the specific leaf by matching the leaf slug
 const leaf = tree.leaves.find((l : any) => l.slug === leafSlug);

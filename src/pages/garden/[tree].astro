@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import BackLink from "@/components/garden/BackLink.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import LeafCard from "@/components/garden/LeafCard.astro";
+import AddButton from "@/components/garden/AddButton.astro";
 import { createClient } from '@supabase/supabase-js';
 
 // Create a Supabase client using environment variables
@@ -50,13 +51,18 @@ const metadata = { growthStages: metadataData ?? [] };
     <GardenHeader title={tree.name} description={tree.description} />
 
     <div class="space-y-6">
-      {tree.leaves.map((leaf: any) => (
+      {tree.leaves.map((leaf : any) => (
         <LeafCard 
           leaf={leaf} 
           treeSlug={tree.slug} 
           metadata={metadata} 
         />
       ))}
+      
+      <!-- Add Leaf Button -->
+      <div class="h-[120px]">
+        <AddButton type="leaf" treeSlug={tree.slug} />
+      </div>
     </div>
   </div>
 </BaseLayout>

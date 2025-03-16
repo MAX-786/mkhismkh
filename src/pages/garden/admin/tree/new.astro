@@ -1,0 +1,52 @@
+---
+export const prerender = false;
+import FormLayout from "@/components/garden/admin/FormLayout.astro";
+import TreeForm from "@/components/garden/admin/TreeForm.astro";
+import { isUserAdmin } from '@/lib/auth';
+import { createTree } from '@/lib/supabase';
+
+// Check if user is admin
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
+
+if (!isAdmin) {
+  return Astro.redirect('/garden');
+}
+
+let formError = '';
+
+// Handle form submission
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const name = formData.get('name')?.toString();
+    const slug = formData.get('slug')?.toString();
+    const description = formData.get('description')?.toString();
+    
+    // Validate inputs
+    if (!name || !slug || !description) {
+      formError = 'All fields are required';
+    } else {
+      // Insert new tree
+      const { error } = await createTree({ name, slug, description });
+      
+      if (error) throw error;
+      
+      // Redirect to the new tree page
+      return Astro.redirect(`/garden/${slug}`);
+    }
+  } catch (error) {
+    console.error('Error creating tree:', error);
+    formError = 'An error occurred while creating the tree';
+  }
+}
+---
+
+<FormLayout 
+  title="Add New Tree" 
+  description="Create a new tree in your digital garden"
+  backLink="/garden/"
+  backText="Back to Garden"
+>
+  <TreeForm formError={formError} />
+</FormLayout>

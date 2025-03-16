@@ -1,0 +1,177 @@
+---
+interface Props {
+  growthStages: any[];
+  formError?: string;
+}
+
+const { growthStages, formError } = Astro.props;
+---
+
+<form method="POST" class="space-y-6">
+  {formError && <div class="p-3 bg-red-100 text-red-800 rounded-md">{formError}</div>}
+  
+  <div>
+    <label for="title" class="block text-sm font-medium">Title</label>
+    <input 
+      type="text" 
+      id="title" 
+      name="title" 
+      required
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    />
+  </div>
+  
+  <div>
+    <label for="slug" class="block text-sm font-medium">Slug</label>
+    <input 
+      type="text" 
+      id="slug" 
+      name="slug" 
+      required
+      pattern="[a-z0-9-]+"
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    />
+    <p class="mt-1 text-xs text-black/60 dark:text-white/60">
+      Only lowercase letters, numbers, and hyphens
+    </p>
+  </div>
+  
+  <div>
+    <label for="growth_stage" class="block text-sm font-medium">Growth Stage</label>
+    <select 
+      id="growth_stage" 
+      name="growth_stage" 
+      required
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    >
+      <option value="">Select a growth stage</option>
+      {growthStages.map((stage) => (
+        <option value={stage.name}>{stage.name}</option>
+      ))}
+    </select>
+  </div>
+  
+  <div>
+    <label for="tags-input" class="block text-sm font-medium">Tags</label>
+    <div class="mt-1 flex flex-wrap items-center gap-2 rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60">
+      <div id="tags-container" class="flex flex-wrap gap-2"></div>
+      <input 
+        type="text" 
+        id="tags-input" 
+        placeholder="Add a tag and press Enter" 
+        class="flex-grow border-none bg-transparent p-0 focus:outline-none focus:ring-0"
+      />
+      <input type="hidden" id="tags-hidden" name="tags" value="[]" />
+    </div>
+  </div>
+  
+  <div>
+    <label for="content" class="block text-sm font-medium">Content (Markdown)</label>
+    <textarea 
+      id="content" 
+      name="content" 
+      rows="12" 
+      required
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 font-mono shadow-sm dark:border-white/20 dark:bg-black/60"
+    ></textarea>
+  </div>
+  
+  <div>
+    <button 
+      type="submit"
+      class="rounded-md bg-black px-4 py-2 text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
+    >
+      Create Leaf
+    </button>
+  </div>
+</form>
+
+<script>
+  // Tag input functionality
+  document.addEventListener('DOMContentLoaded', initializeForm);
+  document.addEventListener('astro:page-load', initializeForm);
+  
+  function initializeForm() {
+    const tagsInput : any= document.getElementById('tags-input');
+    const tagsContainer : any= document.getElementById('tags-container');
+    const hiddenInput : any= document.getElementById('tags-hidden');
+    const titleInput : any= document.getElementById('title');
+    const slugInput : any= document.getElementById('slug');
+    
+    // Skip if elements don't exist or already initialized
+    if (!tagsInput || !tagsContainer || !hiddenInput || !titleInput || !slugInput || 
+        tagsInput._initialized) {
+      return;
+    }
+    
+    // Mark as initialized to prevent duplicate handlers
+    tagsInput._initialized = true;
+    
+    let tags : any = [];
+    
+    // Function to generate slug from title
+    const generateSlug = (title: string) => {
+      return title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special chars except spaces and hyphens
+        .replace(/\s+/g, '-')     // Replace spaces with hyphens
+        .replace(/-+/g, '-')      // Replace multiple hyphens with single hyphen
+        .trim();
+    };
+    
+    // Auto-generate slug when title changes
+    titleInput.addEventListener('blur', () => {
+      if (titleInput.value && !slugInput.value) {
+        slugInput.value = generateSlug(titleInput.value);
+      }
+    });
+    
+    // Also generate slug when Enter is pressed in title field
+    titleInput.addEventListener('keydown', (e : any) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        slugInput.value = generateSlug(titleInput.value);
+        slugInput.focus();
+      }
+    });
+    
+    // Function to render tags
+    const renderTags = () => {
+      tagsContainer.innerHTML = '';
+      tags.forEach((tag: any, index: number) => {
+        const tagElement = document.createElement('span');
+        tagElement.className = 'inline-flex items-center rounded-full bg-black/10 px-2 py-1 text-xs dark:bg-white/10';
+        tagElement.innerHTML = `
+          ${tag}
+          <button type="button" data-index="${index}" class="ml-1 text-black/60 hover:text-black dark:text-white/60 dark:hover:text-white">×</button>
+        `;
+        tagsContainer.appendChild(tagElement);
+      });
+      
+      // Update hidden input with JSON string of tags
+      hiddenInput.value = JSON.stringify(tags);
+    };
+    
+    // Add tag on Enter
+    tagsInput.addEventListener('keydown', (e: any) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const tag = tagsInput.value.trim();
+        if (tag && !tags.includes(tag)) {
+          tags.push(tag);
+          renderTags();
+          tagsInput.value = '';
+        }
+      }
+    });
+    
+    // Remove tag when × is clicked
+    tagsContainer.addEventListener('click', (e: any) => {
+      if (e.target.tagName === 'BUTTON') {
+        const index = parseInt(e.target.dataset.index);
+        tags = tags.filter((_ : any, i: number) => i !== index);
+        renderTags();
+      }
+    });
+  }
+</script>
