@@ -14,17 +14,18 @@ const isGardenPage = pathname.startsWith("/garden");
 <div class="fixed bottom-2 left-1/2 z-50 block h-16 -translate-x-1/2 sm:hidden">
   <div class="container mx-auto">
     <div
-      class="flex items-center gap-4 rounded-full border border-black/25 bg-white/80 px-4 py-2 shadow-lg saturate-200 backdrop-blur-sm dark:border-white/25 dark:bg-black/50"
+      class="flex items-center gap-2 xs:gap-4 rounded-full border border-black/25 bg-white/80 px-2 xs:px-4 py-2 shadow-lg saturate-200 backdrop-blur-sm dark:border-white/25 dark:bg-black/50"
     >
       <!-- Navigation links -->
-      <nav class="flex gap-2">
+      <nav class="flex gap-1 xs:gap-2">
         {
           LINKS.map((LINK) => (
             <a
               href={LINK.HREF}
               class={cn(
-                "flex items-center justify-center duration-300 hover:transition-colors",
-                pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF
+                "flex items-center justify-center text-xs xs:text-sm duration-300 hover:transition-colors",
+                pathname === LINK.HREF.replace(/\/$/, "") ||
+                  "/" + subpath?.[0] === LINK.HREF.replace(/\/$/, "")
                   ? "border-b-2 border-black text-black dark:border-white dark:text-white"
                   : "text-black/80 hover:text-black dark:text-white/80 dark:hover:text-white",
               )}
@@ -39,13 +40,13 @@ const isGardenPage = pathname.startsWith("/garden");
       <div class="h-6 w-0.5 bg-black/25 dark:bg-white/25"></div>
 
       <!-- Action Buttons -->
-      <div class="flex gap-2">
+      <div class="flex gap-1 xs:gap-2">
         <a
           href={SITE.REPO_URL}
           aria-label="Github repository link"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex size-9 items-center justify-center rounded-full border border-black/25 p-2 text-black/80 duration-300 hover:bg-black/20 hover:transition-colors dark:border-white/25 dark:text-white/80 dark:hover:bg-white/20"
+          class="flex size-7 xs:size-9 items-center justify-center rounded-full border border-black/25 p-1.5 xs:p-2 text-black/80 duration-300 hover:bg-black/20 hover:transition-colors dark:border-white/25 dark:text-white/80 dark:hover:bg-white/20"
         >
           <Icon name="github" class="block size-full" />
         </a>

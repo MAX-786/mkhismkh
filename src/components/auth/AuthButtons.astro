@@ -7,11 +7,11 @@ import {
 } from "@clerk/astro/components";
 ---
 
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 xs:gap-4">
   <SignedOut>
     <SignInButton
       mode="modal"
-      class="max-md:h-[38px] max-md:text-xs max-md:py-0 max-md:px-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
+      class="max-xs:h-[32px] max-xs:text-[10px] max-xs:py-0 max-xs:px-1.5 max-md:h-[38px] max-md:text-xs max-md:py-0 max-md:px-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
     >
       Edit Garden!
     </SignInButton>
@@ -19,7 +19,7 @@ import {
 
   <SignedIn>
     <SignOutButton
-      class="max-md:h-[38px] max-md:text-xs max-md:py-0 max-md:px-2 rounded-md border border-black/20 bg-white/50 px-4 py-2 text-sm font-medium text-black hover:bg-white/80 dark:border-white/20 dark:bg-black/50 dark:text-white dark:hover:bg-black/80"
+      class="max-xs:h-[32px] max-xs:text-[10px] max-xs:py-0 max-xs:px-1.5 max-md:h-[38px] max-md:text-xs max-md:py-0 max-md:px-2 rounded-md border border-black/20 bg-white/50 px-4 py-2 text-sm font-medium text-black hover:bg-white/80 dark:border-white/20 dark:bg-black/50 dark:text-white dark:hover:bg-black/80"
     >
       Sign Out
     </SignOutButton>

@@ -26,7 +26,7 @@ const { tree } = Astro.props;
   </p>
   <div class="flex items-center justify-between">
     <span class="text-sm text-black/60 dark:text-white/60">
-      {tree.leaves.length} leaves
+      {tree.leaves.length > 1 ? `${tree.leaves.length} leaves` : "1 leaf"}
     </span>
     <a
       href={`/garden/${tree.slug}`}
