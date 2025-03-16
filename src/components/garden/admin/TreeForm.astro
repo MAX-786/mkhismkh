@@ -1,0 +1,97 @@
+---
+interface Props {
+  formError?: string;
+}
+
+const { formError } = Astro.props;
+---
+
+<form method="POST" class="space-y-6">
+  {formError && <div class="p-3 bg-red-100 text-red-800 rounded-md">{formError}</div>}
+  
+  <div>
+    <label for="name" class="block text-sm font-medium">Name</label>
+    <input 
+      type="text" 
+      id="name" 
+      name="name" 
+      required
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    />
+  </div>
+  
+  <div>
+    <label for="slug" class="block text-sm font-medium">Slug</label>
+    <input 
+      type="text" 
+      id="slug" 
+      name="slug" 
+      required
+      pattern="[a-z0-9-]+"
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    />
+    <p class="mt-1 text-xs text-black/60 dark:text-white/60">
+      Only lowercase letters, numbers, and hyphens
+    </p>
+  </div>
+  
+  <div>
+    <label for="description" class="block text-sm font-medium">Description</label>
+    <textarea 
+      id="description" 
+      name="description" 
+      rows="4" 
+      required
+      class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
+    ></textarea>
+  </div>
+  
+  <div>
+    <button 
+      type="submit"
+      class="rounded-md bg-black px-4 py-2 text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
+    >
+      Create Tree
+    </button>
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', initializeForm);
+  document.addEventListener('astro:page-load', initializeForm);
+  
+  function initializeForm() {
+    const nameInput : any= document.getElementById('name');
+    const slugInput : any= document.getElementById('slug');
+    
+    if (!nameInput || !slugInput || nameInput._initialized) return;
+    
+    nameInput._initialized = true;
+    
+    // Generate slug from name
+    const generateSlug = (name : string) => {
+      return name
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+    };
+    
+    // Auto-generate slug when name changes
+    nameInput.addEventListener('blur', () => {
+      if (nameInput.value && !slugInput.value) {
+        slugInput.value = generateSlug(nameInput.value);
+      }
+    });
+    
+    // Also generate slug when Enter is pressed in name field
+    nameInput.addEventListener('keydown', (e : any) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        slugInput.value = generateSlug(nameInput.value);
+        slugInput.focus();
+      }
+    });
+  }
+</script>

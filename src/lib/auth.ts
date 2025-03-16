@@ -6,10 +6,7 @@ const clerk = createClerkClient({
 });
 
 // List of admin user IDs from Clerk
-export const ADMIN_USER_IDS = [
-  'user_2uNBWs4y8UCMoC0vZCopoxpukUc', // Replace with your actual Clerk user ID
-  // Add other admin IDs as needed
-];
+export const ADMIN_USER_IDS = import.meta.env.ADMIN_USER_IDS.split(',');
 
 // Check if a user is an admin
 export async function isUserAdmin(userId: string | null): Promise<boolean> {

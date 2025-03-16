@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly SUPABASE_KEY: string;
   readonly PUBLIC_CLERK_PUBLISHABLE_KEY: string;
   readonly CLERK_SECRET_KEY: string;
+  readonly ADMIN_USER_IDs: string;
 }
 
 interface ImportMeta {

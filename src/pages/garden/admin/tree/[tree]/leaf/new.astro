@@ -1,9 +1,9 @@
 ---
 export const prerender = false;
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import BackLink from "@/components/garden/BackLink.astro";
-import { createClient } from '@supabase/supabase-js';
+import FormLayout from "@/components/garden/admin/FormLayout.astro";
+import LeafForm from "@/components/garden/admin/LeafForm.astro";
 import { isUserAdmin } from '@/lib/auth';
+import { getTree, getGrowthStages, createLeaf } from '@/lib/supabase';
 
 // Check if user is admin
 const { userId } = Astro.locals.auth();
@@ -14,33 +14,24 @@ if (!isAdmin) {
 }
 
 // Get tree slug from params
-const { tree: treeSlug } = Astro.params;
-
-// Create Supabase client
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const { tree: treeSlug } : any = Astro.params;
 
 // Get tree data
-const { data: tree, error: treeError } = await supabase
-  .from('trees')
-  .select('*')
-  .eq('slug', treeSlug)
-  .single();
+const { data: tree, error: treeError } = await getTree(treeSlug);
 
 if (treeError || !tree) {
   console.error("Error fetching tree:", treeError);
   return Astro.redirect('/garden');
 }
 
-// Get growth stages for dropdown
-const { data: growthStages, error: stagesError } = await supabase
-  .from('growth_stages')
-  .select('*');
+// Get growth stages
+const { data: growthStages, error: metadataError } = await getGrowthStages();
 
-if (stagesError) {
-  console.error("Error fetching growth stages:", stagesError);
+if (metadataError) {
+  console.error("Error fetching growth stages:", metadataError);
 }
+
+let formError = '';
 
 // Handle form submission
 if (Astro.request.method === 'POST') {
@@ -50,101 +41,44 @@ if (Astro.request.method === 'POST') {
     const slug = formData.get('slug')?.toString();
     const content = formData.get('content')?.toString();
     const growthStage = formData.get('growth_stage')?.toString();
+    const tagsInput = formData.get('tags')?.toString() || '';
+    const tags = tagsInput ? JSON.parse(tagsInput) : [];
+    
+    // Get current date in ISO format (YYYY-MM-DD)
+    const currentDate = new Date().toISOString().split('T')[0];
     
     // Validate inputs
     if (!title || !slug || !content || !growthStage) {
-      throw new Error('All fields are required');
-    }
-    
-    // Insert new leaf
-    const { error } = await supabase
-      .from('leaves')
-      .insert([{ 
+      formError = 'All fields are required';
+    } else {
+      // Insert new leaf with current date
+      const { error } = await createLeaf({ 
         title, 
         slug, 
         content, 
         growth_stage: growthStage,
-        tree_id: tree.id
-      }]);
+        tree_id: tree.id,
+        tags,
+        date: currentDate
+      });
+        
+      if (error) throw error;
       
-    if (error) throw error;
-    
-    // Redirect to the tree page
-    return Astro.redirect(`/garden/${treeSlug}`);
+      // Redirect to the tree page
+      return Astro.redirect(`/garden/${treeSlug}`);
+    }
   } catch (error) {
     console.error('Error creating leaf:', error);
+    formError = 'An error occurred while creating the leaf';
   }
 }
 ---
 
-<BaseLayout title={`Add New Leaf to ${tree.name}`} description={`Create a new leaf in the ${tree.name} tree`}>
-  <div class="container mx-auto pt-24 pb-12 md:pt-32 xl:pt-24">
-    <BackLink href={`/garden/${treeSlug}`} text={`Back to ${tree.name}`} />
-    
-    <div class="mx-auto max-w-2xl">
-      <h1 class="mb-8 text-3xl font-bold">Add New Leaf to {tree.name}</h1>
-      
-      <form method="POST" class="space-y-6">
-        <div>
-          <label for="title" class="block text-sm font-medium">Title</label>
-          <input 
-            type="text" 
-            id="title" 
-            name="title" 
-            required
-            class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
-          />
-        </div>
-        
-        <div>
-          <label for="slug" class="block text-sm font-medium">Slug</label>
-          <input 
-            type="text" 
-            id="slug" 
-            name="slug" 
-            required
-            pattern="[a-z0-9-]+"
-            class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
-          />
-          <p class="mt-1 text-xs text-black/60 dark:text-white/60">
-            Only lowercase letters, numbers, and hyphens
-          </p>
-        </div>
-        
-        <div>
-          <label for="growth_stage" class="block text-sm font-medium">Growth Stage</label>
-          <select 
-            id="growth_stage" 
-            name="growth_stage" 
-            required
-            class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
-          >
-            {growthStages?.map((stage) => (
-              <option value={stage.name}>{stage.name}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div>
-          <label for="content" class="block text-sm font-medium">Content (Markdown)</label>
-          <textarea 
-            id="content" 
-            name="content" 
-            rows="12" 
-            required
-            class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 font-mono shadow-sm dark:border-white/20 dark:bg-black/60"
-          ></textarea>
-        </div>
-        
-        <div>
-          <button 
-            type="submit"
-            class="rounded-md bg-black px-4 py-2 text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
-          >
-            Create Leaf
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</BaseLayout>
+<FormLayout 
+  title={`Add New Leaf to ${tree.name}`} 
+  description={`Create a new leaf in the ${tree.name} tree`}
+  backLink={`/garden/${treeSlug}`}
+  backText={`Back to ${tree.name}`}
+>
+  <LeafForm growthStages={growthStages || []} formError={formError} />
+</FormLayout>
