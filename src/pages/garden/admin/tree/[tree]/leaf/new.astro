@@ -44,14 +44,11 @@ if (Astro.request.method === "POST") {
     const tagsInput = formData.get("tags")?.toString() || "";
     const tags = tagsInput ? JSON.parse(tagsInput) : [];
 
-    // Get current date in ISO format (YYYY-MM-DD)
-    const currentDate = new Date().toISOString().split("T")[0];
-
     // Validate inputs
     if (!title || !slug || !content || !growthStage) {
       formError = "All fields are required";
     } else {
-      // Insert new leaf with current date
+      // Insert new leaf
       const { error } = await createLeaf({
         title,
         slug,
@@ -59,7 +56,6 @@ if (Astro.request.method === "POST") {
         growth_stage: growthStage,
         tree_id: tree.id,
         tags,
-        date: currentDate,
       });
 
       if (error) throw error;

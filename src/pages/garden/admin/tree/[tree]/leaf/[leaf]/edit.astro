@@ -50,9 +50,6 @@ if (Astro.request.method === "POST") {
     const tagsInput = formData.get("tags")?.toString() || "";
     const tags = tagsInput ? JSON.parse(tagsInput) : [];
 
-    // Keep the original date
-    const date = leaf.date;
-
     // Validate inputs
     if (!title || !slug || !content || !growthStage) {
       formError = "All fields are required";
@@ -64,7 +61,6 @@ if (Astro.request.method === "POST") {
         content,
         growth_stage: growthStage,
         tags,
-        date,
       });
 
       if (error) throw error;

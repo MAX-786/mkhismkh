@@ -11,6 +11,7 @@ type Props = {
     growth_stage: string;
     tags: string[];
     date: string;
+    created_at: string;
   };
   treeSlug: string;
   metadata?: {
@@ -70,7 +71,11 @@ const { leaf, treeSlug, metadata } = Astro.props;
       }
     </div>
     <span class="text-sm text-black/60 dark:text-white/60">
-      {leaf.date}
+      {new Date(leaf.created_at).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })}
     </span>
   </div>
 </div>

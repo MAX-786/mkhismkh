@@ -57,7 +57,6 @@ export const createLeaf = async (leaf: {
   growth_stage: string;
   tree_id: number;
   tags: string[];
-  date: string;
 }) => {
   const supabase = createSupabaseClient();
   return await supabase.from("leaves").insert([leaf]);
@@ -79,7 +78,6 @@ export const updateLeaf = async (
     content: string;
     growth_stage: string;
     tags: string[];
-    date: string;
   },
 ) => {
   const supabase = createSupabaseClient();
