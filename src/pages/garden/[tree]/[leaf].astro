@@ -12,7 +12,7 @@ const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Get the tree and leaf slugs from the URL parameters
-const { tree: treeSlug, leaf: leafSlug } = Astro.params;
+const { tree: treeSlug, leaf: leafSlug } : any = Astro.params;
 
 // Query the tree with its embedded leaves and leaf references
 const { data: tree, error: treeError } = await supabase
@@ -76,6 +76,7 @@ if (!leaf) {
     <article class="prose prose-lg max-w-none dark:prose-invert">
       <LeafHeader 
         leaf={leaf} 
+        treeSlug={treeSlug}
         metadata={metadata} 
       />
       <LeafContent 

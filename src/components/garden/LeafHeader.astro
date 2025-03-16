@@ -1,11 +1,16 @@
 ---
+import EditButton from './EditButton.astro';
+
 type Props = {
   leaf: {
+    id: number;
     title: string;
+    slug: string;
     date: string;
     growth_stage: string;
     tags: string[];
   };
+  treeSlug: string;
   metadata?: {
     growthStages?: {
       name: string;
@@ -14,11 +19,14 @@ type Props = {
   };
 };
 
-const { leaf, metadata } = Astro.props;
+const { leaf, treeSlug, metadata } = Astro.props;
 ---
 
 <header class="not-prose mb-8">
-  <h1 class="text-3xl font-bold mb-4">{leaf.title}</h1>
+  <div class="flex items-center gap-3 mb-4">
+    <h1 class="text-3xl font-bold">{leaf.title}</h1>
+    <EditButton type="leaf" id={leaf.id} slug={leaf.slug} treeSlug={treeSlug} />
+  </div>
   <div class="mt-4 flex flex-wrap items-center gap-4">
     <div class="flex items-center">
       <span class="text-sm text-black/60 dark:text-white/60">{leaf.date}</span>

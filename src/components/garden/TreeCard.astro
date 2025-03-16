@@ -1,6 +1,9 @@
 ---
+import EditButton from './EditButton.astro';
+
 type Props = {
   tree: {
+    id: number;
     name: string;
     slug: string;
     description: string;
@@ -11,23 +14,25 @@ type Props = {
 const { tree } = Astro.props;
 ---
 
-<a href={`/garden/${tree.slug}`} class="group">
-  <div
-    class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
-  >
-    <h3 class="mb-2 text-xl font-bold">{tree.name}</h3>
-    <p class="mb-4 text-black/80 dark:text-white/80">
-      {tree.description}
-    </p>
-    <div class="flex items-center justify-between">
-      <span class="text-sm text-black/60 dark:text-white/60">
-        {tree.leaves.length} leaves
-      </span>
-      <span
-        class="text-sm font-medium text-black/80 transition-transform duration-300 group-hover:translate-x-1 dark:text-white/80"
-      >
-        Explore →
-      </span>
-    </div>
+<div
+  class="rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
+>
+  <div class="flex items-center justify-between mb-2">
+    <h3 class="text-xl font-bold">{tree.name}</h3>
+    <EditButton type="tree" id={tree.id} slug={tree.slug} />
   </div>
-</a>
+  <p class="mb-4 text-black/80 dark:text-white/80">
+    {tree.description}
+  </p>
+  <div class="flex items-center justify-between">
+    <span class="text-sm text-black/60 dark:text-white/60">
+      {tree.leaves.length} leaves
+    </span>
+    <a 
+      href={`/garden/${tree.slug}`}
+      class="text-sm font-medium text-black/80 transition-transform duration-300 hover:translate-x-1 dark:text-white/80"
+    >
+      Explore →
+    </a>
+  </div>
+</div>

@@ -1,9 +1,15 @@
 ---
 interface Props {
   formError?: string;
+  initialData?: {
+    name: string;
+    slug: string;
+    description: string;
+  };
+  submitLabel?: string;
 }
 
-const { formError } = Astro.props;
+const { formError, initialData, submitLabel = "Create Tree" } = Astro.props;
 ---
 
 <form method="POST" class="space-y-6">
@@ -16,6 +22,7 @@ const { formError } = Astro.props;
       id="name" 
       name="name" 
       required
+      value={initialData?.name || ""}
       class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
     />
   </div>
@@ -27,6 +34,7 @@ const { formError } = Astro.props;
       id="slug" 
       name="slug" 
       required
+      value={initialData?.slug || ""}
       pattern="[a-z0-9-]+"
       class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
     />
@@ -43,7 +51,7 @@ const { formError } = Astro.props;
       rows="4" 
       required
       class="mt-1 block w-full rounded-md border border-black/20 bg-white/90 p-2 shadow-sm dark:border-white/20 dark:bg-black/60"
-    ></textarea>
+    >{initialData?.description || ""}</textarea>
   </div>
   
   <div>
@@ -51,25 +59,31 @@ const { formError } = Astro.props;
       type="submit"
       class="rounded-md bg-black px-4 py-2 text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80"
     >
-      Create Tree
+      {submitLabel}
     </button>
   </div>
 </form>
 
-<script>
+<script define:vars={{ initialData }}>
   document.addEventListener('DOMContentLoaded', initializeForm);
   document.addEventListener('astro:page-load', initializeForm);
   
   function initializeForm() {
-    const nameInput : any= document.getElementById('name');
-    const slugInput : any= document.getElementById('slug');
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
     
     if (!nameInput || !slugInput || nameInput._initialized) return;
     
     nameInput._initialized = true;
     
+    // Only auto-generate slug if we're creating a new tree (no initial data)
+    // or if the slug field is empty
+    const shouldAutoGenerateSlug = !initialData || !initialData.slug;
+    
+    if (!shouldAutoGenerateSlug) return;
+    
     // Generate slug from name
-    const generateSlug = (name : string) => {
+    const generateSlug = (name) => {
       return name
         .toLowerCase()
         .replace(/[^\w\s-]/g, '')
@@ -86,7 +100,7 @@ const { formError } = Astro.props;
     });
     
     // Also generate slug when Enter is pressed in name field
-    nameInput.addEventListener('keydown', (e : any) => {
+    nameInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         slugInput.value = generateSlug(nameInput.value);

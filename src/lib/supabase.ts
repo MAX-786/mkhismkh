@@ -64,3 +64,26 @@ export const createLeaf = async (leaf: {
     .from('leaves')
     .insert([leaf]);
 };
+
+export const updateTree = async (id: number, tree: { name: string, slug: string, description: string }) => {
+  const supabase = createSupabaseClient();
+  return await supabase
+    .from('trees')
+    .update(tree)
+    .eq('id', id);
+};
+
+export const updateLeaf = async (id: number, leaf: { 
+  title: string, 
+  slug: string, 
+  content: string, 
+  growth_stage: string,
+  tags: string[],
+  date: string
+}) => {
+  const supabase = createSupabaseClient();
+  return await supabase
+    .from('leaves')
+    .update(leaf)
+    .eq('id', id);
+};

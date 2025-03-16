@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+import FormLayout from "@/components/garden/admin/FormLayout.astro";
+import LeafForm from "@/components/garden/admin/LeafForm.astro";
+import { isUserAdmin } from '@/lib/auth';
+import { getTree, getGrowthStages, updateLeaf } from '@/lib/supabase';
+
+// Check if user is admin
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
+
+if (!isAdmin) {
+  return Astro.redirect('/garden');
+}
+
+// Get tree and leaf slugs from params
+const { tree: treeSlug, leaf: leafSlug }: any = Astro.params;
+
+// Get tree data
+const { data: tree, error: treeError } = await getTree(treeSlug);
+
+if (treeError || !tree) {
+  console.error("Error fetching tree:", treeError);
+  return Astro.redirect('/garden');
+}
+
+// Find the specific leaf
+const leaf = tree.leaves.find((l: any) => l.slug === leafSlug);
+if (!leaf) {
+  return Astro.redirect(`/garden/${treeSlug}`);
+}
+
+// Get growth stages
+const { data: growthStages, error: metadataError } = await getGrowthStages();
+
+if (metadataError) {
+  console.error("Error fetching growth stages:", metadataError);
+}
+
+let formError = '';
+
+// Handle form submission
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const title = formData.get('title')?.toString();
+    const slug = formData.get('slug')?.toString();
+    const content = formData.get('content')?.toString();
+    const growthStage = formData.get('growth_stage')?.toString();
+    const tagsInput = formData.get('tags')?.toString() || '';
+    const tags = tagsInput ? JSON.parse(tagsInput) : [];
+    
+    // Keep the original date
+    const date = leaf.date;
+    
+    // Validate inputs
+    if (!title || !slug || !content || !growthStage) {
+      formError = 'All fields are required';
+    } else {
+      // Update leaf
+      const { error } = await updateLeaf(leaf.id, { 
+        title, 
+        slug, 
+        content, 
+        growth_stage: growthStage,
+        tags,
+        date
+      });
+        
+      if (error) throw error;
+      
+      // Redirect to the leaf page (using new slug in case it changed)
+      return Astro.redirect(`/garden/${treeSlug}/${slug}`);
+    }
+  } catch (error) {
+    console.error('Error updating leaf:', error);
+    formError = 'An error occurred while updating the leaf';
+  }
+}
+---
+
+<FormLayout 
+  title={`Edit Leaf: ${leaf.title}`} 
+  description={`Update this leaf in the ${tree.name} tree`}
+  backLink={`/garden/${treeSlug}/${leafSlug}`}
+  backText={`Back to ${leaf.title}`}
+>
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-medium">Edit Leaf Details</h2>
+    <a 
+      href={`/garden/${treeSlug}/${leafSlug}`}
+      class="px-4 py-2 rounded-md border border-black/20 text-black/70 hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:bg-white/5"
+    >
+      Cancel
+    </a>
+  </div>
+  
+  <LeafForm 
+    growthStages={growthStages || []} 
+    formError={formError}
+    initialData={{
+      title: leaf.title,
+      slug: leaf.slug,
+      content: leaf.content,
+      growth_stage: leaf.growth_stage,
+      tags: leaf.tags || []
+    }}
+    submitLabel="Update Leaf"
+  />
+</FormLayout>
