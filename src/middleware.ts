@@ -15,10 +15,13 @@ const isAuthRoute = createRouteMatcher([
 
 export const onRequest = clerkMiddleware((auth, context) => {
   const { userId } = auth();
+  const url = new URL(context.request.url);
   
   // Check if route requires authentication
   if (isAuthRoute(context.request) && !userId) {
-    return auth().redirectToSignIn();
+    return auth().redirectToSignIn(({
+      returnBackUrl: url.pathname
+    }));
   }
   
   // Check if route requires admin access
