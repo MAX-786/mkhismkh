@@ -20,13 +20,44 @@ export default {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
       },
-      typography: {
+      typography: (theme) => ({
         DEFAULT: {
           css: {
             maxWidth: "full",
+            pre: {
+              backgroundColor: theme('colors.gray.800'),
+              color: theme('colors.gray.100'),
+              borderRadius: theme('borderRadius.md'),
+              borderWidth: '1px',
+              borderColor: theme('colors.gray.700'),
+              padding: theme('spacing.4'),
+              boxShadow: theme('boxShadow.sm'),
+            },
+            code: {
+              color: theme('colors.pink.500'),
+              fontWeight: '600',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
           },
         },
-      },
+        invert: {
+          css: {
+            pre: {
+              backgroundColor: '#1e1e3f', // Dark purple background
+              color: '#e2e8f0',
+              borderColor: '#2d2d6c',
+            },
+            code: {
+              color: '#f8c555', // Amber for inline code
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [require("@tailwindcss/typography")],

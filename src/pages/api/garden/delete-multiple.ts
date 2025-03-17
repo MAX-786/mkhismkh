@@ -5,11 +5,20 @@ import { deleteMultipleTrees, deleteMultipleLeaves } from "@/lib/supabase";
 export const POST: APIRoute = async ({ request, locals }) => {
   // Check if user is admin
   const { userId } = locals.auth();
-  const isAdmin = await isUserAdmin(userId);
-
-  if (!isAdmin) {
+  
+  // Return 401 if not signed in
+  if (!userId) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
+    });
+  }
+  
+  const isAdmin = await isUserAdmin(userId);
+
+  // Return 403 if signed in but not admin
+  if (!isAdmin) {
+    return new Response(JSON.stringify({ error: "Forbidden: Admin access required" }), {
+      status: 403,
     });
   }
 

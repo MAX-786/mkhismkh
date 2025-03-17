@@ -1,6 +1,7 @@
 ---
 import EditButton from "./EditButton.astro";
 import DeleteButton from "./DeleteButton.astro";
+import { isUserAdmin } from "@/lib/auth";
 
 type Props = {
   leaf: {
@@ -23,21 +24,26 @@ type Props = {
 };
 
 const { leaf, treeSlug, metadata } = Astro.props;
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
 ---
 
 <div
-  class="selectable-item rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
+  class="selectable-item group relative rounded-lg border border-black/25 bg-white/80 p-6 transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:border-white/25 dark:bg-black/50 dark:hover:shadow-white/10"
   data-id={leaf.id}
 >
+  <!-- Only show checkbox for admin users -->
+  {isAdmin && (
+    <div class="select-checkbox absolute right-3 top-3 z-10 hidden">
+      <input
+        type="checkbox"
+        class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        onchange="this.closest('.selectable-item').classList.toggle('selected', this.checked); if(window.updateMultiSelectToolbar) { window.updateMultiSelectToolbar(document.querySelectorAll('.selectable-item.selected').length); }"
+      />
+    </div>
+  )}
   <div class="mb-2 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <div class="select-checkbox hidden">
-        <input 
-          type="checkbox" 
-          id={`leaf-${leaf.id}`} 
-          class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-        />
-      </div>
       <h3 class="text-lg font-bold">{leaf.title}</h3>
     </div>
     <div class="flex items-center gap-1">

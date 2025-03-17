@@ -1,4 +1,6 @@
 ---
+import { marked } from 'marked';
+
 type Props = {
   content: string;
   references?: {
@@ -8,10 +10,11 @@ type Props = {
 };
 
 const { content, references } = Astro.props;
+const htmlContent = marked.parse(content);
 ---
 
-<div class="content">
-  {content.split("\n").map((paragraph) => <p>{paragraph}</p>)}
+<div class="content prose prose-lg dark:prose-invert">
+  <Fragment set:html={htmlContent} />
 </div>
 
 {

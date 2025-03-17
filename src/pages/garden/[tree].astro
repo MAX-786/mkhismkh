@@ -7,6 +7,7 @@ import LeafCard from "@/components/garden/LeafCard.astro";
 import AddButton from "@/components/garden/AddButton.astro";
 import MultiSelectToolbar from "@/components/garden/MultiSelectToolbar.astro";
 import { createClient } from "@supabase/supabase-js";
+import { isUserAdmin } from "@/lib/auth";
 
 // Create a Supabase client using environment variables
 const supabaseUrl = import.meta.env.SUPABASE_URL;
@@ -47,6 +48,10 @@ if (metadataError) {
 
 // Wrap the metadata to match the expected type shape
 const metadata = { growthStages: metadataData ?? [] };
+
+// Check if user is admin
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
 ---
 
 <BaseLayout title={tree.name} description={tree.description}>
@@ -63,12 +68,14 @@ const metadata = { growthStages: metadataData ?? [] };
         }}
       />
       
-      <button
-        id="toggle-select-mode"
-        class="px-3 py-1.5 rounded-md border border-black/20 text-black/70 hover:bg-black/5 dark:border-white/20 dark:text-white/70 dark:hover:bg-white/5"
-      >
-        Select
-      </button>
+      {isAdmin && (
+        <button
+          id="toggle-select-mode"
+          class="rounded-md border border-black/20 bg-white/50 px-3 py-1.5 text-sm font-medium text-black hover:bg-white/80 dark:border-white/20 dark:bg-black/50 dark:text-white dark:hover:bg-black/80"
+        >
+          Select
+        </button>
+      )}
     </div>
 
     <div class="space-y-6">
@@ -84,8 +91,8 @@ const metadata = { growthStages: metadataData ?? [] };
       </div>
     </div>
     
-    <!-- Multi-select toolbar -->
-    <MultiSelectToolbar type="leaf" treeSlug={tree.slug} />
+    <!-- Multi-select toolbar - only show for admin -->
+    {isAdmin && <MultiSelectToolbar type="leaf" treeSlug={tree.slug} />}
   </div>
 </BaseLayout>
 
