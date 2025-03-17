@@ -1,57 +1,58 @@
 ---
+// Use ISR for this page
 export const prerender = false;
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import BackLink from "@/components/garden/BackLink.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import LeafCard from "@/components/garden/LeafCard.astro";
 import AddButton from "@/components/garden/AddButton.astro";
 import MultiSelectToolbar from "@/components/garden/MultiSelectToolbar.astro";
-import { createClient } from "@supabase/supabase-js";
 import { isUserAdmin } from "@/lib/auth";
-
-// Create a Supabase client using environment variables
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { getTree } from "@/lib/supabase";
 
 // Get the tree slug from the URL parameters
-const { tree: treeSlug } = Astro.params;
+const { tree: treeSlug } : any = Astro.params;
+
+// Get the updated query param (used for cache busting after edits)
+const updated = Astro.url.searchParams.get('updated');
+
+// Check if user is admin
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
 
 // Query the tree with its embedded leaves and leaf references
-const { data: tree, error } = await supabase
-  .from("trees")
-  .select(
-    `
-    *,
-    leaves (
-      *,
-      leaf_references (*)
-    )
-  `,
-  )
-  .eq("slug", treeSlug)
-  .single();
+const { data: tree, error } = await getTree(treeSlug);
 
 if (error || !tree) {
   console.error("Error fetching tree:", error);
   return Astro.redirect("/garden");
 }
 
-// Query metadata from the growth_stages table
-const { data: metadataData, error: metadataError } = await supabase
-  .from("growth_stages")
-  .select("*");
+// Define metadata for growth stages
+const metadata = {
+  growthStages: [
+    {
+      name: "seedling",
+      description: "Initial thoughts or ideas that are still forming",
+    },
+    {
+      name: "budding",
+      description: "Ideas that are taking shape but need more development",
+    },
+    {
+      name: "growing",
+      description: "Well-developed thoughts that continue to evolve",
+    },
+    {
+      name: "evergreen",
+      description: "Mature, well-tested ideas that remain relevant over time",
+    },
+  ],
+};
 
-if (metadataError) {
-  console.error("Error fetching metadata:", metadataError);
-}
-
-// Wrap the metadata to match the expected type shape
-const metadata = { growthStages: metadataData ?? [] };
-
-// Check if user is admin
-const { userId } = Astro.locals.auth();
-const isAdmin = await isUserAdmin(userId);
+// Add cache control headers for ISR
+Astro.response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=3600');
 ---
 
 <BaseLayout title={tree.name} description={tree.description}>

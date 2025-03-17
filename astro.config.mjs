@@ -18,5 +18,18 @@ export default defineConfig({
     }),
   ],
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+    speedInsights: {
+      enabled: true,
+    },
+    imageService: true,
+    isr: {
+      // Configure ISR expiration and allowed paths
+      expiration: 60 * 60 * 24, // 24 hours
+      allowQuery: ['updated'], // Allow ?updated=true query param to bypass cache
+    },
+  }),
 });

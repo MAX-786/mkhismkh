@@ -1,49 +1,29 @@
 ---
+// Use ISR for this page
 export const prerender = false;
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import BackLink from "@/components/garden/BackLink.astro";
 import LeafHeader from "@/components/garden/LeafHeader.astro";
 import LeafContent from "@/components/garden/LeafContent.astro";
-import { createClient } from "@supabase/supabase-js";
-
-// Create a Supabase client using environment variables
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { getTree, getLeaf } from "@/lib/supabase";
 
 // Get the tree and leaf slugs from the URL parameters
 const { tree: treeSlug, leaf: leafSlug }: any = Astro.params;
 
-// Query the tree with its embedded leaves and leaf references
-const { data: tree, error: treeError } = await supabase
-  .from("trees")
-  .select(
-    `
-    *,
-    leaves (
-      *,
-      leaf_references (*)
-    )
-  `,
-  )
-  .eq("slug", treeSlug)
-  .single();
+// Get the updated query param (used for cache busting after edits)
+const updated = Astro.url.searchParams.get('updated');
 
-if (treeError || !tree) {
-  console.error("Error fetching tree:", treeError);
+// Query the tree and leaf data
+const { data: tree, error: treeError } = await getTree(treeSlug);
+const { data: leaf, error: leafError } = await getLeaf(treeSlug, leafSlug);
+
+if (treeError || !tree || leafError || !leaf) {
+  console.error("Error fetching data:", treeError || leafError);
   return Astro.redirect("/garden");
 }
 
-// Query metadata from the growth_stages table
-const { data: metadataData, error: metadataError } = await supabase
-  .from("growth_stages")
-  .select("*");
-
-if (metadataError) {
-  console.error("Error fetching metadata:", metadataError);
-}
-
-// Wrap the metadata to match the expected type shape
+// Define metadata for growth stages
 const metadata = {
   growthStages: [
     {
@@ -65,11 +45,8 @@ const metadata = {
   ],
 };
 
-// Find the specific leaf by matching the leaf slug
-const leaf = tree.leaves.find((l: any) => l.slug === leafSlug);
-if (!leaf) {
-  return Astro.redirect(`/garden/${treeSlug}`);
-}
+// Add cache control headers for ISR
+Astro.response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=3600');
 ---
 
 <BaseLayout title={leaf.title} description={leaf.content.substring(0, 150)}>

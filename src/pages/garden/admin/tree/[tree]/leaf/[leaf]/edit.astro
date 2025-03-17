@@ -3,7 +3,7 @@ export const prerender = false;
 import FormLayout from "@/components/garden/admin/FormLayout.astro";
 import LeafForm from "@/components/garden/admin/LeafForm.astro";
 import { isUserAdmin } from "@/lib/auth";
-import { getTree, getGrowthStages, updateLeaf } from "@/lib/supabase";
+import { getTree, updateLeaf } from "@/lib/supabase";
 
 // Check if user is admin
 const { userId } = Astro.locals.auth();
@@ -30,12 +30,28 @@ if (!leaf) {
   return Astro.redirect(`/garden/${treeSlug}`);
 }
 
-// Get growth stages
-const { data: growthStages, error: metadataError } = await getGrowthStages();
-
-if (metadataError) {
-  console.error("Error fetching growth stages:", metadataError);
-}
+// Define metadata for growth stages
+const metadata = {
+  growthStages: [
+    {
+      name: "seedling",
+      description: "Initial thoughts or ideas that are still forming",
+    },
+    {
+      name: "budding",
+      description: "Ideas that are taking shape but need more development",
+    },
+    {
+      name: "growing",
+      description: "Well-developed thoughts that continue to evolve",
+    },
+    {
+      name: "evergreen",
+      description: "Mature, well-tested ideas that remain relevant over time",
+    },
+  ],
+};
+const growthStages = metadata.growthStages;
 
 let formError = "";
 

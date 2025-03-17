@@ -3,7 +3,7 @@ export const prerender = false;
 import FormLayout from "@/components/garden/admin/FormLayout.astro";
 import TreeForm from "@/components/garden/admin/TreeForm.astro";
 import { isUserAdmin } from "@/lib/auth";
-import { getTree, updateTree } from "@/lib/supabase";
+import { getTree, updateTree, revalidateCache } from "@/lib/supabase";
 
 // Check if user is admin
 const { userId } = Astro.locals.auth();
@@ -23,34 +23,36 @@ if (treeError || !tree) {
   console.error("Error fetching tree:", treeError);
   return Astro.redirect("/garden");
 }
-
 let formError = "";
 
-// Handle form submission
+// Process form submission
 if (Astro.request.method === "POST") {
   try {
     const formData = await Astro.request.formData();
-    const name = formData.get("name")?.toString();
-    const slug = formData.get("slug")?.toString();
-    const description = formData.get("description")?.toString();
-
-    // Validate inputs
-    if (!name || !slug || !description) {
-      formError = "All fields are required";
-    } else {
-      // Update tree
-      const { error } = await updateTree(tree.id, { name, slug, description });
-
-      if (error) throw error;
-
-      // Redirect to the tree page (using new slug in case it changed)
-      return Astro.redirect(`/garden/${slug}`);
-    }
+    const name = formData.get("name")?.toString() || "";
+    const slug = formData.get("slug")?.toString() || "";
+    const description = formData.get("description")?.toString() || "";
+    
+    const { data, error } = await updateTree(treeSlug, { name, slug, description });
+    
+    if (error) throw error;
+    
+    // Revalidate affected pages
+    await revalidateCache([
+      '/garden',
+      `/garden/${slug}`,
+    ]);
+    
+    // Redirect with cache-busting query param
+    return Astro.redirect(`/garden/${slug}?updated=true`);
   } catch (error) {
-    console.error("Error updating tree:", error);
     formError = "An error occurred while updating the tree";
+    console.error("Error updating tree:", error);
   }
 }
+
+// Prevent caching for admin pages
+Astro.response.headers.set('Cache-Control', 'no-store, max-age=0');
 ---
 
 <FormLayout

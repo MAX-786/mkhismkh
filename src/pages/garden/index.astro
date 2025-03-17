@@ -1,34 +1,31 @@
 ---
+// Use ISR for this page
 export const prerender = false;
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import GardenHeader from "@/components/garden/GardenHeader.astro";
 import TreeCard from "@/components/garden/TreeCard.astro";
 import AddButton from "@/components/garden/AddButton.astro";
 import MultiSelectToolbar from "@/components/garden/MultiSelectToolbar.astro";
-import { createClient } from "@supabase/supabase-js";
 import { isUserAdmin } from "@/lib/auth";
+import { getAllTrees } from "@/lib/supabase";
 
-// Create a Supabase client using your public URL and anon key
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Check if user is admin
+const { userId } = Astro.locals.auth();
+const isAdmin = await isUserAdmin(userId);
+
+// Get the updated query param (used for cache busting after edits)
+const updated = Astro.url.searchParams.get('updated');
 
 // Fetch trees with their leaves and nested leaf references
-const { data: trees, error } = await supabase.from("trees").select(`
-    *,
-    leaves (
-      *,
-      leaf_references (*)
-    )
-  `);
+const { data: trees, error } = await getAllTrees();
 
 if (error) {
   console.error("Error fetching trees:", error);
 }
 
-// Check if user is admin
-const { userId } = Astro.locals.auth();
-const isAdmin = await isUserAdmin(userId);
+// Add cache control headers for ISR
+Astro.response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=3600');
 ---
 
 <BaseLayout
