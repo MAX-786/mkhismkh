@@ -12,10 +12,7 @@ export default defineConfig({
     react(),
     tailwind(),
     icon(),
-    clerk({
-      publishableKey: import.meta.env.PUBLIC_CLERK_PUBLISHABLE_KEY,
-      secretKey: import.meta.env.CLERK_SECRET_KEY,
-    }),
+    clerk(),
   ],
   output: "server",
   adapter: vercel({

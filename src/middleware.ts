@@ -7,18 +7,12 @@ const isAdminRoute = createRouteMatcher([
   "/api/garden/:path*",
 ]);
 
-// Define routes that require authentication
-const isAuthRoute = createRouteMatcher([
-  "/garden/admin/:path*",
-  "/api/garden/:path*",
-]);
-
 export const onRequest = clerkMiddleware((auth, context) => {
   const { userId } = auth();
   const url = new URL(context.request.url);
 
   // Check if route requires authentication
-  if (isAuthRoute(context.request) && !userId) {
+  if (isAdminRoute(context.request) && !userId) {
     return auth().redirectToSignIn({
       returnBackUrl: url.pathname,
     });
