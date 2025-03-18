@@ -32,7 +32,7 @@ if (Astro.request.method === "POST") {
     const name = formData.get("name")?.toString() || "";
     const slug = formData.get("slug")?.toString() || "";
     const description = formData.get("description")?.toString() || "";
-    
+    //@ts-ignore
     const { data, error } = await updateTree(treeSlug, { name, slug, description });
     
     if (error) throw error;
