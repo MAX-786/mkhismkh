@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/consts";
 
 interface Props {
@@ -67,7 +67,7 @@ const socialImageURL = new URL(image, Astro.site).href;
 <meta property="twitter:image" content={socialImageURL} />
 
 <!--  View Transitions -->
-<ViewTransitions />
+<ClientRouter />
 
 <!--  Theme Toggle -->
 <script is:inline>
