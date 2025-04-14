@@ -1,5 +1,7 @@
 # MAX-786's Personal Website
 
+<a href="https://mkhismkh.com" target="_blank" ><img src="public/social-card.png" alt="Prompy Logo" height="100" /> </a>
+
 This is the source code for my personal website, built using [Astro](https://astro.build/). Visit the live site at [mkhismkh.com](https://mkhismkh.com).
 
 ## Features

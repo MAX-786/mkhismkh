@@ -12,9 +12,6 @@ import { getAllTrees } from "@/lib/supabase";
 const { userId } = Astro.locals.auth();
 const isAdmin = await isUserAdmin(userId);
 
-// Get the updated query param (used for cache busting after edits)
-const updated = Astro.url.searchParams.get('updated');
-
 // Fetch trees with their leaves and nested leaf references
 const { data: trees, error } = await getAllTrees();
 
