@@ -84,7 +84,7 @@ This project uses the following technologies:
 1. Create a new Clerk application at [clerk.com](https://clerk.com)
 2. Configure authentication methods (email, social logins, etc.)
 3. Copy your publishable key and secret key to the `.env` file
-4. Add admin user IDs to the `ADMIN_USER_IDs` environment variable
+4. Add admin user IDs to the `ADMIN_USER_IDS` environment variable
 
 ### Deployment
 
