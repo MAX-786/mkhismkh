@@ -61,7 +61,7 @@ This project uses the following technologies:
    # Clerk
    PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
    CLERK_SECRET_KEY=your_clerk_secret_key
-   ADMIN_USER_IDs=comma_separated_admin_user_ids
+   ADMIN_USER_IDS=comma_separated_admin_user_ids
    ```
 
 4. Start the development server:
